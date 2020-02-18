@@ -1,7 +1,7 @@
 @testable import CrudAPI
 import XCTVapor
 
-final class CrudAPIRoutingTests: XCTestCase {
+final class RoutingTests: XCTestCase {
     func testRouteRegistrationAtGivenPath() throws {
         struct Todo: Crudable {
             static var path: String = "todos"
