@@ -3,5 +3,5 @@ import XCTest
 import CrudAPITests
 
 var tests = [XCTestCaseEntry]()
-tests += CrudAPITests.allTests()
+tests += CrudAPIRoutingTests.allTests()
 XCTMain(tests)
