@@ -2,19 +2,23 @@
 import XCTVapor
 import Fluent
 
-final class RoutingTests: XCTestCase {
+final class RoutingTests: ApplicationXCTestCase {
+    func testNoRoutesRegistered() throws {
+        try app.test(.GET, "/todos") { res in
+            XCTAssertEqual(res.status, .notFound)
+        }
+    }
+    
     func testRouteRegistrationAtGivenPath() throws {
-        let app = Application(.testing)
-        defer { app.shutdown() }
+        try crud(app, model: Todo.self)
         
-        try! crud(app, model: Todo.self)
-        
-        try app.testable().test(.GET, "/todos") { res in
+        try app.test(.GET, "/todos") { res in
             XCTAssertEqual(res.status, .ok)
         }
     }
 
     static var allTests = [
+        ("testNoRoutesRegistered", testNoRoutesRegistered),
         ("testRouteRegistrationAtGivenPath", testRouteRegistrationAtGivenPath),
     ]
 }
