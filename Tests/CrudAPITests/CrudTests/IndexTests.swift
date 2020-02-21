@@ -6,7 +6,8 @@ final class IndexTests: ApplicationXCTestCase {
         try routes()
         
         try app.test(.GET, "/todos/") { res in
-            XCTAssertEqual(res.status, .notFound)
+            XCTAssertEqual(res.status, .ok)
+            // By design fallback to IndexAll
         }
     }
     
@@ -41,5 +42,6 @@ final class IndexTests: ApplicationXCTestCase {
     static var allTests = [
         ("testIndexWithoutID", testIndexWithoutID),
         ("testIndexForGivenID", testIndexForGivenID),
+        ("testIndexForFakeID", testIndexForFakeID),
     ]
 }
