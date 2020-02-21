@@ -20,6 +20,7 @@ final class IndexAllTests: ApplicationXCTestCase {
             XCTAssertContent([Todo].self, res) {
                 XCTAssertGreaterThan($0.count, 0)
                 XCTAssertEqual($0.count, 3)
+                XCTAssertNotEqual($0.count, 2)
                 XCTAssertEqual($0[0].title, Todo(title: "Wash clothes").title)
             }
         }
