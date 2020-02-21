@@ -17,9 +17,10 @@ final class IndexTests: ApplicationXCTestCase {
 
         let id = 1
         try app.test(.GET, "/todos/\(id)") { res in
-            XCTAssertContent(Todo.self, res) {
+            XCTAssertContent(Todo.Public.self, res) {
                 XCTAssertEqual($0.id, id)
                 XCTAssertEqual($0.title, "Wash clothes")
+                XCTAssertTrue($0.isPublic)
             }
         }
     }
