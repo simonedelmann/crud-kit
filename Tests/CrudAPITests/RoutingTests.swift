@@ -10,7 +10,7 @@ final class RoutingTests: ApplicationXCTestCase {
     }
     
     func testRouteRegistrationAtGivenPath() throws {
-        try crud(app, model: Todo.self)
+        try routes()
         
         try app.test(.GET, "/todos") { res in
             XCTAssertEqual(res.status, .ok)

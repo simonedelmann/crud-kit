@@ -1,5 +1,8 @@
+@testable import CrudAPI
 import XCTVapor
 import Vapor
+import Fluent
+import FluentSQLiteDriver
 
 class ApplicationXCTestCase: XCTestCase {
     var app: Application!
@@ -15,5 +18,13 @@ class ApplicationXCTestCase: XCTestCase {
 
     override func tearDown() {
         app.shutdown()
+    }
+    
+    func seed() throws {
+        try Todo.seed(on: app.db)
+    }
+    
+    func routes() throws {
+        try crud(app, model: Todo.self)
     }
 }

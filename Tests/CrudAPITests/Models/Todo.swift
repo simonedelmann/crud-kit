@@ -41,24 +41,9 @@ extension Todo {
 }
 
 extension Todo {
-    struct seeder: Migration {
-        var name = "TodoSeeder"
-        
-        static let todos = [
-            Todo(title: "Wash clothes"),
-            Todo(title: "Read book"),
-            Todo(title: "Call mum"),
-        ]
-        
-        func prepare(on database: Database) -> EventLoopFuture<Void> {
-            Self.todos.map {
-                $0.save(on: database)
-            }.flatten(on: database.eventLoop)
-        }
-        
-        func revert(on database: Database) -> EventLoopFuture<Void> {
-            // Nothing to revert
-            database.eventLoop.makeSucceededFuture(Void())
-        }
+    static func seed(on database: Database) throws {
+        try Todo(title: "Wash clothes").save(on: database).wait()
+        try Todo(title: "Read book").save(on: database).wait()
+        try Todo(title: "Prepare dinner").save(on: database).wait()
     }
 }

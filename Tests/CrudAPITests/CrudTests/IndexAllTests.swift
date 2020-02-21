@@ -3,7 +3,7 @@ import XCTVapor
 
 final class IndexAllTests: ApplicationXCTestCase {
     func testEmptyIndexAll() throws {
-        try crud(app, model: Todo.self)
+        try routes()
         
         try app.test(.GET, "/todos") { res in
             XCTAssertContent([Todo].self, res) {
@@ -13,10 +13,8 @@ final class IndexAllTests: ApplicationXCTestCase {
     }
     
     func testIndexAllContainingAllElements() throws {
-        app.migrations.add(Todo.seeder())
-        try app.autoMigrate().wait()
-        
-        try crud(app, model: Todo.self)
+        try seed()
+        try routes()
         
         try app.test(.GET, "/todos") { res in
             XCTAssertContent([Todo].self, res) {
