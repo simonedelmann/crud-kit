@@ -1,7 +1,5 @@
 @testable import CrudAPI
 import XCTVapor
-import Fluent
-import FluentSQLiteDriver
 
 final class IndexAllTests: ApplicationXCTestCase {
     func testEmptyIndexAll() throws {
