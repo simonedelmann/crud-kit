@@ -10,8 +10,12 @@ final class Todo: Model, Content {
     @ID(key: "id")
     var id: Int?
     
-    init(id: Int? = nil) {
+    @Field(key: "title")
+    var title: String
+    
+    init(id: Int? = nil, title: String) {
         self.id = id
+        self.title = title
     }
 }
 
@@ -26,6 +30,7 @@ extension Todo {
         func prepare(on database: Database) -> EventLoopFuture<Void> {
             database.schema("todos")
                 .field("id", .int, .identifier(auto: true))
+                .field("title", .string, .required)
                 .create()
         }
         
@@ -40,9 +45,9 @@ extension Todo {
         var name = "TodoSeeder"
         
         static let todos = [
-            Todo(),
-            Todo(),
-            Todo(),
+            Todo(title: "Wash clothes"),
+            Todo(title: "Read book"),
+            Todo(title: "Call mum"),
         ]
         
         func prepare(on database: Database) -> EventLoopFuture<Void> {
