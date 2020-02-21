@@ -23,6 +23,18 @@ extension Todo: Crudable {
     static var path = "todos"
 }
 
+extension Todo: Publicable {
+    struct Public: Content {
+        var id: Int?
+        var title: String
+        var isPublic: Bool
+    }
+    
+    func `public`() -> Public {
+        Public.init(id: id, title: title, isPublic: true)
+    }
+}
+
 extension Todo {
     struct migration: Migration {
         var name = "TodoMigration"
