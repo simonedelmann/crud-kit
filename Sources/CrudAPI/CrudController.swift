@@ -2,7 +2,7 @@ import Vapor
 import Fluent
 
 protocol CrudControllerProtocol {
-    associatedtype ModelT: Crudable & Model & Content where ModelT.IDValue: LosslessStringConvertible
+    associatedtype ModelT: Model & Content where ModelT.IDValue: LosslessStringConvertible
 }
 
 extension CrudControllerProtocol {
@@ -15,7 +15,7 @@ extension CrudControllerProtocol {
     }
 }
 
-public struct CrudController<T: Crudable & Model & Content>: CrudControllerProtocol where T.IDValue: LosslessStringConvertible {
+public struct CrudController<T: Model & Content>: CrudControllerProtocol where T.IDValue: LosslessStringConvertible {
     typealias ModelT = T
     
     static func indexAll(req: Request) -> EventLoopFuture<[T]> {

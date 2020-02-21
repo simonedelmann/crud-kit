@@ -19,10 +19,6 @@ final class Todo: Model, Content {
     }
 }
 
-extension Todo: Crudable {
-    static var path = "todos"
-}
-
 extension Todo: Publicable {
     struct Public: Content {
         var id: Int?

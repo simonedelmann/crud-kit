@@ -25,6 +25,8 @@ class ApplicationXCTestCase: XCTestCase {
     }
     
     func routes() throws {
-        try crud(app, model: Todo.self)
+        app.group("todos") { routes in
+            routes.crud(model: Todo.self)
+        }
     }
 }
