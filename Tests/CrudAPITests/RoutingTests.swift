@@ -6,6 +6,7 @@ final class RoutingTests: ApplicationXCTestCase {
     func testNoRoutesRegistered() throws {
         try app.test(.GET, "/todos") { res in
             XCTAssertEqual(res.status, .notFound)
+            XCTAssertNotEqual(res.status, .ok)
         }
     }
     
@@ -14,6 +15,7 @@ final class RoutingTests: ApplicationXCTestCase {
         
         try app.test(.GET, "/todos") { res in
             XCTAssertEqual(res.status, .ok)
+            XCTAssertNotEqual(res.status, .notFound)
         }
     }
 

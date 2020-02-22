@@ -6,6 +6,8 @@ final class IndexAllTests: ApplicationXCTestCase {
         try routes()
         
         try app.test(.GET, "/todos") { res in
+            XCTAssertEqual(res.status, .ok)
+            XCTAssertNotEqual(res.status, .notFound)
             XCTAssertContent([Todo].self, res) {
                 XCTAssertEqual($0.count, 0)
             }
@@ -17,6 +19,8 @@ final class IndexAllTests: ApplicationXCTestCase {
         try routes()
         
         try app.test(.GET, "/todos") { res in
+            XCTAssertEqual(res.status, .ok)
+            XCTAssertNotEqual(res.status, .notFound)
             XCTAssertContent([Todo.Public].self, res) {
                 XCTAssertGreaterThan($0.count, 0)
                 XCTAssertEqual($0.count, 3)

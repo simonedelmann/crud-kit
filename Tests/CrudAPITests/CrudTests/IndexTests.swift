@@ -7,6 +7,7 @@ final class IndexTests: ApplicationXCTestCase {
         
         try app.test(.GET, "/todos/") { res in
             XCTAssertEqual(res.status, .ok)
+            XCTAssertNotEqual(res.status, .notFound)
             // By design fallback to IndexAll
         }
     }
@@ -17,8 +18,11 @@ final class IndexTests: ApplicationXCTestCase {
 
         let id = 1
         try app.test(.GET, "/todos/\(id)") { res in
+            XCTAssertEqual(res.status, .ok)
+            XCTAssertNotEqual(res.status, .notFound)
             XCTAssertContent(Todo.Public.self, res) {
                 XCTAssertEqual($0.id, id)
+                XCTAssertNotEqual($0.id, 2)
                 XCTAssertEqual($0.title, "Wash clothes")
                 XCTAssertTrue($0.isPublic)
             }
@@ -32,11 +36,13 @@ final class IndexTests: ApplicationXCTestCase {
         let fakeId1 = 150
         try app.test(.GET, "/todos/\(fakeId1)") { res in
             XCTAssertEqual(res.status, .notFound)
+            XCTAssertNotEqual(res.status, .ok)
         }
         
         let fakeId2 = "1a"
         try app.test(.GET, "/todos/\(fakeId2)") { res in
             XCTAssertEqual(res.status, .notFound)
+            XCTAssertNotEqual(res.status, .ok)
         }
     }
     
