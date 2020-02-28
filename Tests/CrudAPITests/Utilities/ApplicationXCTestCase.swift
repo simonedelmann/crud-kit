@@ -28,5 +28,8 @@ class ApplicationXCTestCase: XCTestCase {
         app.group("todos") { routes in
             routes.crud(model: Todo.self)
         }
+        app.group("simpletodos") { routes in
+            routes.crud(model: SimpleTodo.self)
+        }
     }
 }

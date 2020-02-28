@@ -31,6 +31,33 @@ final class CreateTests: ApplicationXCTestCase {
         }
     }
     
+    func testCreateNonCreatableWithValidData() throws {
+        try routes()
+
+        try app.test(.GET, "/simpletodos/1") { res in
+            XCTAssertEqual(res.status, .notFound)
+            XCTAssertNotEqual(res.status, .ok)
+        }.test(.POST, "/simpletodos", json: SimpleTodo(title: "Run tests")) { res in
+            XCTAssertEqual(res.status, .ok)
+            XCTAssertNotEqual(res.status, .notFound)
+
+            XCTAssertContent(SimpleTodo.Public.self, res) {
+                XCTAssertNotNil($0.id)
+                XCTAssertEqual($0.id, 1)
+                XCTAssertEqual($0.title, "Run tests")
+            }
+        }.test(.GET, "/simpletodos/1") { res in
+            XCTAssertEqual(res.status, .ok)
+            XCTAssertNotEqual(res.status, .notFound)
+            
+            XCTAssertContent(SimpleTodo.Public.self, res) {
+                XCTAssertNotNil($0.id)
+                XCTAssertEqual($0.id, 1)
+                XCTAssertEqual($0.title, "Run tests")
+            }
+        }
+    }
+    
     func testCreateWithoutData() throws {
         struct Empty: Content {}
 
@@ -69,6 +96,7 @@ final class CreateTests: ApplicationXCTestCase {
     static var allTests = [
         ("testCreateWithValidData", testCreateWithValidData),
         ("testCreateWithoutData", testCreateWithoutData),
+        ("testCreateNonCreatableWithValidData", testCreateNonCreatableWithValidData),
         ("testCreateWithInvalidData", testCreateWithInvalidData),
     ]
 }
