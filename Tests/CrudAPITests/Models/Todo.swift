@@ -31,6 +31,16 @@ extension Todo: Publicable {
     }
 }
 
+extension Todo: Createable {
+    struct Create: Content {
+        var title: String
+    }
+
+    convenience init(from data: Create) {
+        self.init(title: data.title)
+    }
+}
+
 extension Todo {
     struct migration: Migration {
         var name = "TodoMigration"

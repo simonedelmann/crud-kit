@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/vapor/async-kit.git",
         "state": {
           "branch": null,
-          "revision": "e67124898436b463af4eec9f98b17aff51f2d9bb",
-          "version": "1.0.0-beta.2.3"
+          "revision": "42edd5d6b52afc0678f85d4a67aa79e0be79fba5",
+          "version": "1.0.0-beta.2.6"
         }
       },
       {
@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/vapor/fluent-kit.git",
         "state": {
           "branch": null,
-          "revision": "7bd671352df88abd829c9378b81ee966a15ea4d3",
-          "version": "1.0.0-beta.4"
+          "revision": "92c3ed001c2f74443d17f93b93604723a9064e1f",
+          "version": "1.0.0-beta.4.4"
         }
       },
       {
@@ -87,8 +87,8 @@
         "repositoryURL": "https://github.com/vapor/sql-kit.git",
         "state": {
           "branch": null,
-          "revision": "85077880568b755badc594d5d5cfe3020a5e87c3",
-          "version": "3.0.0-beta.6.5"
+          "revision": "b560d6d2b8a2bdbd9afaedee0acf5fb06ea1bb64",
+          "version": "3.0.0-beta.6.8"
         }
       },
       {
@@ -96,8 +96,8 @@
         "repositoryURL": "https://github.com/vapor/sqlite-kit.git",
         "state": {
           "branch": null,
-          "revision": "f0980810d474d092c86479c656cb50754c1e10c7",
-          "version": "4.0.0-beta.3.2"
+          "revision": "6d1f957b8a9c054ec8db7e3e9ebb0c4167f5d069",
+          "version": "4.0.0-beta.3.3"
         }
       },
       {
@@ -177,8 +177,8 @@
         "repositoryURL": "https://github.com/vapor/vapor.git",
         "state": {
           "branch": null,
-          "revision": "ab9d9cf8a2265128184ec8bdd0049ce86dec9305",
-          "version": "4.0.0-beta.3.19"
+          "revision": "6f61074a549b1da62b6d9ff93bf6f3f49306afdc",
+          "version": "4.0.0-beta.3.24"
         }
       },
       {

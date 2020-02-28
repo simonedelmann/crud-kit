@@ -40,7 +40,7 @@ final class CreateTests: ApplicationXCTestCase {
             XCTAssertEqual(res.status, .notFound)
             XCTAssertNotEqual(res.status, .ok)
         }.test(.POST, "/todos", json: Empty()) { res in
-            XCTAssertEqual(res.status, .unprocessableEntity)
+            XCTAssertEqual(res.status, .badRequest)
             XCTAssertNotEqual(res.status, .ok)
         }.test(.GET, "/todos/1") { res in
             XCTAssertEqual(res.status, .notFound)

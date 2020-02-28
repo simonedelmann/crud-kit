@@ -7,10 +7,17 @@ protocol CrudControllerProtocol {
 
 extension CrudControllerProtocol {
     internal func indexAll(on database: Database) -> EventLoopFuture<[ModelT]> {
-        return ModelT.query(on: database).all()
+        ModelT.query(on: database).all()
     }
     
     internal func index(_ id: ModelT.IDValue?, on database: Database) -> EventLoopFuture<ModelT> {
-        return ModelT.find(id, on: database).unwrap(or: Abort(.notFound))
+        ModelT.find(id, on: database).unwrap(or: Abort(.notFound))
+    }
+}
+
+extension CrudControllerProtocol where ModelT: Createable {
+    internal func create(from data: ModelT.Create, on database: Database) -> EventLoopFuture<ModelT> {
+        let model = ModelT.init(from: data)
+        return model.save(on: database).map { model }
     }
 }
