@@ -7,5 +7,6 @@ extension RoutesBuilder {
         self.get(use: crudController.indexAll)
         self.get(":id", use: crudController.index)
         self.post(use: crudController.create)
+        self.delete(":id", use: crudController.delete)
     }
 }

@@ -13,6 +13,13 @@ extension CrudControllerProtocol {
     internal func index(_ id: ModelT.IDValue?, on database: Database) -> EventLoopFuture<ModelT> {
         ModelT.find(id, on: database).unwrap(or: Abort(.notFound))
     }
+    
+    internal func delete(_ id: ModelT.IDValue?, on database: Database) -> EventLoopFuture<HTTPStatus> {
+        ModelT.find(id, on: database)
+            .unwrap(or: Abort(.notFound))
+            .flatMap { $0.delete(on: database) }
+            .map { .ok }
+    }
 }
 
 extension CrudControllerProtocol where ModelT: Createable {

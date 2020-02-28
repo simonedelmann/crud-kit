@@ -12,6 +12,11 @@ struct CrudController<T: Model & Content & Publicable>: CrudControllerProtocol w
         let id: T.IDValue? = req.parameters.get("id")
         return index(id, on: req.db).public()
     }
+    
+    func delete(req: Request) -> EventLoopFuture<HTTPStatus> {
+        let id: T.IDValue? = req.parameters.get("id")
+        return delete(id, on: req.db)
+    }
 }
 
 extension CrudController where T: Createable {
