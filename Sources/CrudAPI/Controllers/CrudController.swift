@@ -4,12 +4,6 @@ import Fluent
 struct CrudController<T: Model & Content & Publicable>: CrudControllerProtocol where T.IDValue: LosslessStringConvertible {
     typealias ModelT = T
     
-    internal func validate<Type>(_ type: Type, on request: Request) throws {
-        if let validatable = type.self as? Validatable.Type {
-            try validatable.validate(request)
-        }
-    }
-    
     func indexAll(req: Request) -> EventLoopFuture<[T.Public]> {
         indexAll(on: req.db).public()
     }
@@ -35,6 +29,14 @@ struct CrudController<T: Model & Content & Publicable>: CrudControllerProtocol w
     func delete(req: Request) -> EventLoopFuture<HTTPStatus> {
         let id: T.IDValue? = req.parameters.get("id")
         return delete(id, on: req.db)
+    }
+}
+
+extension CrudController {
+    internal func validate<Type>(_ type: Type, on request: Request) throws {
+        if let validatable = type.self as? Validatable.Type {
+            try validatable.validate(request)
+        }
     }
 }
 
