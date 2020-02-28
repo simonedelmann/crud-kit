@@ -2,5 +2,5 @@ import Vapor
 
 public protocol Createable {
     associatedtype Create: Content
-    init(from data: Create)
+    init(from create: Create)
 }

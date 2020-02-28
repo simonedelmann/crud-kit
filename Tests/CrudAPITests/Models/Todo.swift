@@ -36,8 +36,8 @@ extension Todo: Createable {
         var title: String
     }
 
-    convenience init(from data: Create) {
-        self.init(title: data.title)
+    convenience init(from create: Create) {
+        self.init(title: create.title)
     }
 }
 
