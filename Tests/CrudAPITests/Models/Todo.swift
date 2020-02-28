@@ -43,6 +43,12 @@ extension Todo: Createable {
     }
 }
 
+extension Todo.Create: Validatable {
+    static func validations(_ validations: inout Validations) {
+        validations.add("title", as: String.self, is: .count(3...))
+    }
+}
+
 extension Todo {
     struct migration: Migration {
         var name = "TodoMigration"
