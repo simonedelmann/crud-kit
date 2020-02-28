@@ -19,6 +19,8 @@ final class Todo: Model, Content {
     }
 }
 
+extension Todo: Crudable {}
+
 extension Todo: Publicable {
     struct Public: Content {
         var id: Int?
