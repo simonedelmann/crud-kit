@@ -7,7 +7,7 @@ final class Todo: Model, Content {
     
     init() { }
     
-    @ID(key: "id")
+    @ID(custom: "id")
     var id: Int?
     
     @Field(key: "title")
@@ -36,8 +36,8 @@ extension Todo: Createable {
         var title: String
     }
 
-    convenience init(from create: Create) {
-        self.init(title: create.title)
+    convenience init(from data: Create) {
+        self.init(title: data.title)
     }
 }
 
