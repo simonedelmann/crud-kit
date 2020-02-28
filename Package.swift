@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.2
 import PackageDescription
 
 let package = Package(
@@ -17,9 +17,16 @@ let package = Package(
     targets: [
         .target(
             name: "CrudAPI",
-            dependencies: ["Fluent", "Vapor"]),
+            dependencies: [
+                .product(name: "Vapor", package: "vapor"),
+                .product(name: "Fluent", package: "fluent")
+        ]),
         .testTarget(
             name: "CrudAPITests",
-            dependencies: ["FluentSQLiteDriver", "CrudAPI", "XCTVapor"]),
+            dependencies: [
+                .target(name: "CrudAPI"),
+                .product(name: "XCTVapor", package: "vapor"),
+                .product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver")
+        ]),
     ]
 )
