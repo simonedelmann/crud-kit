@@ -14,6 +14,10 @@ extension CrudControllerProtocol {
         ModelT.find(id, on: database).unwrap(or: Abort(.notFound))
     }
     
+    internal func create(from data: ModelT, on database: Database) -> EventLoopFuture<ModelT> {
+        data.save(on: database).map { data }
+    }
+    
     internal func delete(_ id: ModelT.IDValue?, on database: Database) -> EventLoopFuture<HTTPStatus> {
         ModelT.find(id, on: database)
             .unwrap(or: Abort(.notFound))

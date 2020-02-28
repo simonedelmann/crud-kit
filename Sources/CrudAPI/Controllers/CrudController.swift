@@ -17,6 +17,14 @@ struct CrudController<T: Model & Content & Publicable>: CrudControllerProtocol w
         let id: T.IDValue? = req.parameters.get("id")
         return delete(id, on: req.db)
     }
+    
+    func create(req: Request) throws -> EventLoopFuture<T.Public> {
+        if let validatable = T.self as? Validatable.Type {
+            try validatable.validate(req)
+        }
+        let data = try req.content.decode(T.self)
+        return create(from: data, on: req.db).public()
+    }
 }
 
 extension CrudController where T: Createable {
