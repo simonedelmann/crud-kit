@@ -46,7 +46,7 @@ extension CrudControllerProtocol where ModelT: Replaceable {
     internal func replace(_ id: ModelT.IDValue?, from data: ModelT.Replace, on database: Database) -> EventLoopFuture<ModelT> {
         ModelT.find(id, on: database).unwrap(or: Abort(.notFound))
             .flatMap { model in
-                model.replace(from: data)
+                model.replace(with: data)
                 return model.update(on: database).map { model }
         }
     }

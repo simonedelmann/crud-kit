@@ -52,7 +52,7 @@ extension Todo: Replaceable {
         var title: String
     }
     
-    func replace(from data: Replace) {
+    func replace(with data: Replace) {
         self.title = data.title
     }
 }
