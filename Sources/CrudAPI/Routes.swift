@@ -7,6 +7,7 @@ extension RoutesBuilder {
         self.get(use: crudController.indexAll)
         self.get(":id", use: crudController.index)
         self.post(use: crudController.create)
+        self.put(":id", use: crudController.replace)
         self.delete(":id", use: crudController.delete)
     }
     
@@ -15,7 +16,25 @@ extension RoutesBuilder {
         self.get(use: crudController.indexAll)
         self.get(":id", use: crudController.index)
         self.post(use: crudController.create)
+        self.put(":id", use: crudController.replace)
         self.delete(":id", use: crudController.delete)
     }
-
+    
+    public func crud<T: Model & Content & Publicable & Replaceable>(model: T.Type) where T.IDValue: LosslessStringConvertible {
+        let crudController = CrudController<T>()
+        self.get(use: crudController.indexAll)
+        self.get(":id", use: crudController.index)
+        self.post(use: crudController.create)
+        self.put(":id", use: crudController.replace)
+        self.delete(":id", use: crudController.delete)
+    }
+    
+    public func crud<T: Model & Content & Publicable & Createable & Replaceable>(model: T.Type) where T.IDValue: LosslessStringConvertible {
+        let crudController = CrudController<T>()
+        self.get(use: crudController.indexAll)
+        self.get(":id", use: crudController.index)
+        self.post(use: crudController.create)
+        self.put(":id", use: crudController.replace)
+        self.delete(":id", use: crudController.delete)
+    }
 }
