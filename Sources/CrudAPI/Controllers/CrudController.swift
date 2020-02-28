@@ -4,8 +4,8 @@ import Fluent
 struct CrudController<T: Model & Content & Publicable>: CrudControllerProtocol where T.IDValue: LosslessStringConvertible {
     typealias ModelT = T
     
-    internal func validate(_ candidate: Any, on request: Request) throws {
-        if let validatable = candidate as? Validatable.Type {
+    internal func validate<Type>(_ type: Type, on request: Request) throws {
+        if let validatable = type.self as? Validatable.Type {
             try validatable.validate(request)
         }
     }
