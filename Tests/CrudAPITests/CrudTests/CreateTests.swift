@@ -92,11 +92,4 @@ final class CreateTests: ApplicationXCTestCase {
             XCTAssertNotEqual(res.status, .ok)
         }
     }
-
-    static var allTests = [
-        ("testCreateWithValidData", testCreateWithValidData),
-        ("testCreateWithoutData", testCreateWithoutData),
-        ("testCreateNonCreatableWithValidData", testCreateNonCreatableWithValidData),
-        ("testCreateWithInvalidData", testCreateWithInvalidData),
-    ]
 }

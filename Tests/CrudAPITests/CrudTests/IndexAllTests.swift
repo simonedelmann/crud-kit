@@ -30,9 +30,4 @@ final class IndexAllTests: ApplicationXCTestCase {
             }
         }
     }
-
-    static var allTests = [
-        ("testEmptyIndexAll", testEmptyIndexAll),
-        ("testIndexAllContainingAllElements", testIndexAllContainingAllElements),
-    ]
 }

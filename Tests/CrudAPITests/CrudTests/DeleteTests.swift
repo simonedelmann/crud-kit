@@ -40,9 +40,4 @@ final class DeleteTests: ApplicationXCTestCase {
             }
         }
     }
-
-    static var allTests = [
-        ("testDeleteWithValidId", testDeleteWithValidId),
-        ("testDeleteWithInvalidId", testDeleteWithInvalidId),
-    ]
 }

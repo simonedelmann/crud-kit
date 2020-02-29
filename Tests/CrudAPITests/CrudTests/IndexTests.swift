@@ -45,10 +45,4 @@ final class IndexTests: ApplicationXCTestCase {
             XCTAssertNotEqual(res.status, .ok)
         }
     }
-    
-    static var allTests = [
-        ("testIndexWithoutID", testIndexWithoutID),
-        ("testIndexForGivenID", testIndexForGivenID),
-        ("testIndexForFakeID", testIndexForFakeID),
-    ]
 }

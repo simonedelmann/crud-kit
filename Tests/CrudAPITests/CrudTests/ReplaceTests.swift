@@ -91,12 +91,4 @@ final class ReplaceTests: ApplicationXCTestCase {
             }
         }
     }
-    
-    static var allTests = [
-        ("testReplaceForNonExistingObject", testReplaceForNonExistingObject),
-        ("testReplaceNonReplaceableForNonExistingObject", testReplaceNonReplaceableForNonExistingObject),
-        ("testReplaceWithValidData", testReplaceWithValidData),
-        ("testReplaceNonReplaceableWithValidData", testReplaceNonReplaceableWithValidData),
-        ("testReplaceWithInvalidData", testReplaceWithInvalidData),
-    ]
 }
