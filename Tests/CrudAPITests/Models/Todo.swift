@@ -63,6 +63,22 @@ extension Todo.Replace: Validatable {
     }
 }
 
+extension Todo: Patchable {
+    struct Patch: Content {
+        var title: String?
+    }
+    
+    func patch(with data: Patch) {
+        self.title = data.title ?? self.title
+    }
+}
+
+extension Todo.Patch: Validatable {
+    static func validations(_ validations: inout Validations) {
+        validations.add("title", as: String.self, is: .count(3...))
+    }
+}
+
 extension Todo {
     struct migration: Migration {
         var name = "TodoMigration"

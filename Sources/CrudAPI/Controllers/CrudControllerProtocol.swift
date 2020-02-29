@@ -51,3 +51,13 @@ extension CrudControllerProtocol where ModelT: Replaceable {
         }
     }
 }
+
+extension CrudControllerProtocol where ModelT: Patchable {
+    internal func patch(_ id: ModelT.IDValue?, from data: ModelT.Patch, on database: Database) -> EventLoopFuture<ModelT> {
+        ModelT.find(id, on: database).unwrap(or: Abort(.notFound))
+            .flatMap { model in
+                model.patch(with: data)
+                return model.update(on: database).map { model }
+        }
+    }
+}

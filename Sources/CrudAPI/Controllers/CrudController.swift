@@ -56,3 +56,12 @@ extension CrudController where T: Replaceable {
         return replace(id, from: data, on: req.db).public()
     }
 }
+
+extension CrudController where T: Patchable {
+    func patch(req: Request) throws -> EventLoopFuture<T.Public> {
+        try validate(T.Patch.self, on: req)
+        let id: T.IDValue? = req.parameters.get("id")
+        let data = try req.content.decode(T.Patch.self)
+        return patch(id, from: data, on: req.db).public()
+    }
+}
