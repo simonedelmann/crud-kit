@@ -23,6 +23,4 @@ extension SimpleTodo: Publicable {
     func `public`() -> SimpleTodo {
         self
     }
-    
-    typealias Public = SimpleTodo
 }
