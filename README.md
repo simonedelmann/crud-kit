@@ -114,6 +114,10 @@ extension Todo: Replaceable {
 
 You can add patch support to your model by confirming to `Patchable`.
 
+```
+PATCH /todos/:id      # patch todo
+```
+
 ```swift
 extension Todo: Patchable {
     struct Patch: Content {
