@@ -1,4 +1,4 @@
-@testable import CrudAPI
+@testable import CrudKit
 import XCTVapor
 
 final class IndexTests: ApplicationXCTestCase {

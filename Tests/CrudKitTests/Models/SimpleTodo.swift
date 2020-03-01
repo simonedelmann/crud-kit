@@ -1,6 +1,6 @@
 import Vapor
 import Fluent
-import CrudAPI
+import CrudKit
 
 final class SimpleTodo: Model, Content {
     static var schema = "todos"
