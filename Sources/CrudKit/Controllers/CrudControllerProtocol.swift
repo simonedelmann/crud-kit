@@ -37,8 +37,12 @@ extension CrudControllerProtocol {
 
 extension CrudControllerProtocol where ModelT: Createable {
     internal func create(from data: ModelT.Create, on database: Database) -> EventLoopFuture<ModelT> {
-        let model = ModelT.init(from: data)
-        return model.save(on: database).map { model }
+        do {
+            let model = try ModelT.init(from: data)
+            return model.save(on: database).map { model }
+        } catch {
+            return database.eventLoop.makeFailedFuture(error)
+        }
     }
 }
 
@@ -46,8 +50,12 @@ extension CrudControllerProtocol where ModelT: Replaceable {
     internal func replace(_ id: ModelT.IDValue?, from data: ModelT.Replace, on database: Database) -> EventLoopFuture<ModelT> {
         ModelT.find(id, on: database).unwrap(or: Abort(.notFound))
             .flatMap { model in
-                model.replace(with: data)
-                return model.update(on: database).map { model }
+                do {
+                    try model.replace(with: data)
+                    return model.update(on: database).map { model }
+                } catch {
+                    return database.eventLoop.makeFailedFuture(error)
+                }
         }
     }
 }
@@ -56,8 +64,12 @@ extension CrudControllerProtocol where ModelT: Patchable {
     internal func patch(_ id: ModelT.IDValue?, from data: ModelT.Patch, on database: Database) -> EventLoopFuture<ModelT> {
         ModelT.find(id, on: database).unwrap(or: Abort(.notFound))
             .flatMap { model in
-                model.patch(with: data)
-                return model.update(on: database).map { model }
+                do {
+                    try model.patch(with: data)
+                    return model.update(on: database).map { model }
+                } catch {
+                    return database.eventLoop.makeFailedFuture(error)
+                }
         }
     }
 }

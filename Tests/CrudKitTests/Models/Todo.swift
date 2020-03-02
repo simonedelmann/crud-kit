@@ -36,7 +36,7 @@ extension Todo: Createable {
         var title: String
     }
 
-    convenience init(from data: Create) {
+    convenience init(from data: Create) throws {
         self.init(title: data.title)
     }
 }
@@ -52,7 +52,7 @@ extension Todo: Replaceable {
         var title: String
     }
     
-    func replace(with data: Replace) {
+    func replace(with data: Replace) throws {
         self.title = data.title
     }
 }
@@ -68,7 +68,7 @@ extension Todo: Patchable {
         var title: String?
     }
     
-    func patch(with data: Patch) {
+    func patch(with data: Patch) throws {
         self.title = data.title ?? self.title
     }
 }

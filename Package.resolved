@@ -24,8 +24,8 @@
         "repositoryURL": "https://github.com/vapor/console-kit.git",
         "state": {
           "branch": null,
-          "revision": "a10418160fd4d2af183b0a754a93373734d6ba80",
-          "version": "4.0.0-beta.2.3"
+          "revision": "de99d83c9f3c298371002729cc0601e4b5d9e0c9",
+          "version": "4.0.0-rc.1"
         }
       },
       {
@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/vapor/fluent.git",
         "state": {
           "branch": null,
-          "revision": "ba878e2ead4d83f5f100f2bc798c1269aac94364",
-          "version": "4.0.0-beta.3"
+          "revision": "3eafdfe53c7d945c87769ec443e8ea5528ab9e32",
+          "version": "4.0.0-rc.1"
         }
       },
       {
@@ -56,21 +56,12 @@
         }
       },
       {
-        "package": "multipart-kit",
-        "repositoryURL": "https://github.com/vapor/multipart-kit.git",
-        "state": {
-          "branch": null,
-          "revision": "b41a49b5756ac3fbf8f2b07228a7e75f9b60731a",
-          "version": "4.0.0-beta.2"
-        }
-      },
-      {
         "package": "routing-kit",
         "repositoryURL": "https://github.com/vapor/routing-kit.git",
         "state": {
           "branch": null,
-          "revision": "9eccd8152a66db98c188e74242c686971a007211",
-          "version": "4.0.0-beta.3.1"
+          "revision": "dbc3eafdbe243e9a46eeb6fd7d99266bee52f89f",
+          "version": "4.0.0-rc.1"
         }
       },
       {
@@ -102,7 +93,7 @@
       },
       {
         "package": "swift-backtrace",
-        "repositoryURL": "https://github.com/ianpartridge/swift-backtrace.git",
+        "repositoryURL": "https://github.com/swift-server/swift-backtrace.git",
         "state": {
           "branch": null,
           "revision": "eaf2cef011c0c23d1701aa60b364def8015dc3c7",
@@ -177,8 +168,8 @@
         "repositoryURL": "https://github.com/vapor/vapor.git",
         "state": {
           "branch": null,
-          "revision": "638dc5853bce8d830bb7e8cc12294242f5f9dd84",
-          "version": "4.0.0-beta.4.2"
+          "revision": "0613ee957463e92bf248197ad95e3246805bf6a5",
+          "version": "4.0.0-rc.1"
         }
       },
       {
@@ -186,8 +177,8 @@
         "repositoryURL": "https://github.com/vapor/websocket-kit.git",
         "state": {
           "branch": null,
-          "revision": "670e757f21cc8f1f76a04baac72f72ea1590e18d",
-          "version": "2.0.0-beta.2.5"
+          "revision": "aac462481bcd3039d5db9a0fbe7f4e47eefe2295",
+          "version": "2.0.0-rc.1"
         }
       }
     ]
