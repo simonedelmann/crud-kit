@@ -8,7 +8,7 @@ final class CreateTests: ApplicationXCTestCase {
         try app.test(.GET, "/todos/1") { res in
             XCTAssertEqual(res.status, .notFound)
             XCTAssertNotEqual(res.status, .ok)
-        }.test(.POST, "/todos", json: Todo(title: "Run tests")) { res in
+        }.test(.POST, "/todos", body: Todo(title: "Run tests")) { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertNotEqual(res.status, .notFound)
 
@@ -37,7 +37,7 @@ final class CreateTests: ApplicationXCTestCase {
         try app.test(.GET, "/simpletodos/1") { res in
             XCTAssertEqual(res.status, .notFound)
             XCTAssertNotEqual(res.status, .ok)
-        }.test(.POST, "/simpletodos", json: SimpleTodo(title: "Run tests")) { res in
+        }.test(.POST, "/simpletodos", body: SimpleTodo(title: "Run tests")) { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertNotEqual(res.status, .notFound)
 
@@ -66,7 +66,7 @@ final class CreateTests: ApplicationXCTestCase {
         try app.test(.GET, "/todos/1") { res in
             XCTAssertEqual(res.status, .notFound)
             XCTAssertNotEqual(res.status, .ok)
-        }.test(.POST, "/todos", json: Empty()) { res in
+        }.test(.POST, "/todos", body: Empty()) { res in
             XCTAssertEqual(res.status, .badRequest)
             XCTAssertNotEqual(res.status, .ok)
         }.test(.GET, "/todos/1") { res in
@@ -83,7 +83,7 @@ final class CreateTests: ApplicationXCTestCase {
         try app.test(.GET, "/todos/1") { res in
             XCTAssertEqual(res.status, .notFound)
             XCTAssertNotEqual(res.status, .ok)
-        }.test(.POST, "/todos", json: Todo(title: "Sh")) { res in
+        }.test(.POST, "/todos", body: Todo(title: "Sh")) { res in
             XCTAssertEqual(res.status, .badRequest)
             XCTAssertContains(res.body.string, "title is less than minimum of 3 character(s)")
             XCTAssertNotEqual(res.status, .ok)

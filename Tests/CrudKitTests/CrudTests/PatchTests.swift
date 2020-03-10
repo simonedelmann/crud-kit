@@ -5,7 +5,7 @@ final class PatchTests: ApplicationXCTestCase {
     func testPatchForNonExistingObject() throws {
         try routes()
         
-        try app.test(.PATCH, "/todos/1", json: Todo(title: "Run tests")) { res in
+        try app.test(.PATCH, "/todos/1", body: Todo(title: "Run tests")) { res in
             XCTAssertEqual(res.status, .notFound)
             XCTAssertNotEqual(res.status, .ok)
         }
@@ -15,7 +15,7 @@ final class PatchTests: ApplicationXCTestCase {
         try routes()
         try seed()
         
-        try app.test(.PATCH, "/todos/1", json: Todo(title: "Run other tests")) { res in
+        try app.test(.PATCH, "/todos/1", body: Todo(title: "Run other tests")) { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertNotEqual(res.status, .notFound)
             
@@ -42,7 +42,7 @@ final class PatchTests: ApplicationXCTestCase {
         try routes()
         try seed()
         
-        try app.test(.PATCH, "/todos/1", json: Todo(title: "Ru")) { res in
+        try app.test(.PATCH, "/todos/1", body: Todo(title: "Ru")) { res in
             XCTAssertEqual(res.status, .badRequest)
             XCTAssertNotEqual(res.status, .ok)
         }.test(.GET, "/todos/1") { res in

@@ -5,7 +5,7 @@ final class ReplaceTests: ApplicationXCTestCase {
     func testReplaceForNonExistingObject() throws {
         try routes()
         
-        try app.test(.PUT, "/todos/1", json: Todo(title: "Run tests")) { res in
+        try app.test(.PUT, "/todos/1", body: Todo(title: "Run tests")) { res in
             XCTAssertEqual(res.status, .notFound)
             XCTAssertNotEqual(res.status, .ok)
         }
@@ -14,7 +14,7 @@ final class ReplaceTests: ApplicationXCTestCase {
     func testReplaceNonReplaceableForNonExistingObject() throws {
         try routes()
         
-        try app.test(.PUT, "/simpletodos/1", json: SimpleTodo(title: "Run tests")) { res in
+        try app.test(.PUT, "/simpletodos/1", body: SimpleTodo(title: "Run tests")) { res in
             XCTAssertEqual(res.status, .notFound)
             XCTAssertNotEqual(res.status, .ok)
         }
@@ -24,7 +24,7 @@ final class ReplaceTests: ApplicationXCTestCase {
         try routes()
         try seed()
         
-        try app.test(.PUT, "/todos/1", json: Todo(title: "Run other tests")) { res in
+        try app.test(.PUT, "/todos/1", body: Todo(title: "Run other tests")) { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertNotEqual(res.status, .notFound)
             
@@ -51,7 +51,7 @@ final class ReplaceTests: ApplicationXCTestCase {
         try routes()
         try seed()
         
-        try app.test(.PUT, "/simpletodos/1", json: SimpleTodo(title: "Run other tests")) { res in
+        try app.test(.PUT, "/simpletodos/1", body: SimpleTodo(title: "Run other tests")) { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertNotEqual(res.status, .notFound)
             
@@ -76,7 +76,7 @@ final class ReplaceTests: ApplicationXCTestCase {
         try routes()
         try seed()
         
-        try app.test(.PUT, "/todos/1", json: Todo(title: "Ru")) { res in
+        try app.test(.PUT, "/todos/1", body: Todo(title: "Ru")) { res in
             XCTAssertEqual(res.status, .badRequest)
             XCTAssertNotEqual(res.status, .ok)
         }.test(.GET, "/todos/1") { res in

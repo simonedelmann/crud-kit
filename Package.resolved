@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/vapor/fluent-kit.git",
         "state": {
           "branch": null,
-          "revision": "d4990a5c2709a703876ae2d6f1bb941ad7f9b708",
-          "version": "1.0.0-rc.1"
+          "revision": "dc7554d4850663d7a1c58583117e1032c397d88e",
+          "version": "1.0.0-rc.1.8"
         }
       },
       {
@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/vapor/fluent-sqlite-driver.git",
         "state": {
           "branch": null,
-          "revision": "436005ab1bbbc337d1d1a4081af5384336e2241d",
-          "version": "4.0.0-rc.1"
+          "revision": "df46fa5cb2d3e42cd02f55fe8136b4c3269ad6d1",
+          "version": "4.0.0-rc.1.1"
         }
       },
       {
@@ -69,8 +69,8 @@
         "repositoryURL": "https://github.com/vapor/sql-kit.git",
         "state": {
           "branch": null,
-          "revision": "948eae1d52c8b4ddaf86c540ac4412474f0331e9",
-          "version": "3.0.0-rc.1"
+          "revision": "64c2af0321cd6445982d6873d100cc62e16afcf7",
+          "version": "3.0.0-rc.1.2"
         }
       },
       {
@@ -123,8 +123,8 @@
         "repositoryURL": "https://github.com/apple/swift-metrics.git",
         "state": {
           "branch": null,
-          "revision": "09b72f68ed9b01b614c12855fc7e22876b97a97e",
-          "version": "1.2.1"
+          "revision": "708b960b4605abb20bc55d65abf6bad607252200",
+          "version": "2.0.0"
         }
       },
       {
@@ -168,8 +168,8 @@
         "repositoryURL": "https://github.com/vapor/vapor.git",
         "state": {
           "branch": null,
-          "revision": "0613ee957463e92bf248197ad95e3246805bf6a5",
-          "version": "4.0.0-rc.1"
+          "revision": "6a365261bfb86308b0e170107a9da6a68b65ff93",
+          "version": "4.0.0-rc.3.1"
         }
       },
       {
