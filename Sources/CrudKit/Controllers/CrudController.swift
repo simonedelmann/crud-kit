@@ -1,67 +1,74 @@
 import Vapor
 import Fluent
 
-struct CrudController<T: Model & Content & Publicable>: CrudControllerProtocol where T.IDValue: LosslessStringConvertible {
-    typealias ModelT = T
-    
+struct CrudController<T: Model & Content & Publicable> where T.IDValue: LosslessStringConvertible { }
+
+extension CrudController {
     func indexAll(req: Request) -> EventLoopFuture<[T.Public]> {
-        indexAll(on: req.db).public()
+        T.query(on: req.db).all().public()
     }
     
     func index(req: Request) -> EventLoopFuture<T.Public> {
-        let id: T.IDValue? = req.parameters.get("id")
-        return index(id, on: req.db).public()
+        T.fetch(from: "id", on: req).public()
     }
     
     func create(req: Request) throws -> EventLoopFuture<T.Public> {
-        try validate(T.self, on: req)
+        try T.validate(on: req)
         let data = try req.content.decode(T.self)
-        return create(from: data, on: req.db).public()
+        return data.save(on: req.db).map { data }.public()
     }
 
     func replace(req: Request) throws -> EventLoopFuture<T.Public> {
-        try validate(T.self, on: req)
-        let id: T.IDValue? = req.parameters.get("id")
+        try T.validate(on: req)
         let data = try req.content.decode(T.self)
-        return replace(id, from: data, on: req.db).public()
+        return T.fetch(from: "id", on: req).flatMap {
+            data.id = $0.id
+            data._$id.exists = true
+            return data.update(on: req.db).map { data }.public()
+        }
     }
 
     func delete(req: Request) -> EventLoopFuture<HTTPStatus> {
-        let id: T.IDValue? = req.parameters.get("id")
-        return delete(id, on: req.db)
-    }
-}
-
-extension CrudController {
-    internal func validate<Type>(_ type: Type, on request: Request) throws {
-        if let validatable = type.self as? Validatable.Type {
-            try validatable.validate(request)
-        }
+        T.fetch(from: "id", on: req)
+            .flatMap { $0.delete(on: req.db) }.map { .ok }
     }
 }
 
 extension CrudController where T: Createable {
     func create(req: Request) throws -> EventLoopFuture<T.Public> {
-        try validate(T.Create.self, on: req)
+        try T.Create.validate(on: req)
         let data = try req.content.decode(T.Create.self)
-        return create(from: data, on: req.db).public()
+        let model = try T.init(from: data)
+        return model.save(on: req.db).map { model.public() }
     }
 }
 
 extension CrudController where T: Replaceable {
     func replace(req: Request) throws -> EventLoopFuture<T.Public> {
-        try validate(T.Replace.self, on: req)
-        let id: T.IDValue? = req.parameters.get("id")
+        try T.Replace.validate(on: req)
         let data = try req.content.decode(T.Replace.self)
-        return replace(id, from: data, on: req.db).public()
+        return T.fetch(from: "id", on: req).flatMap { model in
+            do {
+                try model.replace(with: data)
+                return model.update(on: req.db).map { model }.public()
+            } catch {
+                return req.eventLoop.makeFailedFuture(error)
+            }
+        }
     }
 }
 
 extension CrudController where T: Patchable {
     func patch(req: Request) throws -> EventLoopFuture<T.Public> {
-        try validate(T.Patch.self, on: req)
-        let id: T.IDValue? = req.parameters.get("id")
+        try T.Patch.validate(on: req)
         let data = try req.content.decode(T.Patch.self)
-        return patch(id, from: data, on: req.db).public()
+        return T.fetch(from: "id", on: req).flatMap { model in
+            do {
+                try model.patch(with: data)
+                return model.update(on: req.db).map { model }.public()
+            } catch {
+                return req.eventLoop.makeFailedFuture(error)
+            }
+        }
     }
 }
