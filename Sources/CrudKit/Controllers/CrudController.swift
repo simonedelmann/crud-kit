@@ -1,26 +1,26 @@
 import Vapor
 import Fluent
 
-struct CrudController<T: Model & Content & Publicable> where T.IDValue: LosslessStringConvertible { }
+internal struct CrudController<T: Model & Content & Publicable> where T.IDValue: LosslessStringConvertible { }
 
 extension CrudController {
     var idComponentKey: String { "id" }
     
-    func indexAll(req: Request) -> EventLoopFuture<[T.Public]> {
+    internal func indexAll(req: Request) -> EventLoopFuture<[T.Public]> {
         T.query(on: req.db).all().public()
     }
     
-    func index(req: Request) -> EventLoopFuture<T.Public> {
+    internal func index(req: Request) -> EventLoopFuture<T.Public> {
         T.fetch(from: "id", on: req).public()
     }
     
-    func create(req: Request) throws -> EventLoopFuture<T.Public> {
+    internal func create(req: Request) throws -> EventLoopFuture<T.Public> {
         try T.validate(on: req)
         let data = try req.content.decode(T.self)
         return data.save(on: req.db).map { data }.public()
     }
 
-    func replace(req: Request) throws -> EventLoopFuture<T.Public> {
+    internal func replace(req: Request) throws -> EventLoopFuture<T.Public> {
         try T.validate(on: req)
         let data = try req.content.decode(T.self)
         return T.fetch(from: "id", on: req).flatMap {
@@ -30,14 +30,14 @@ extension CrudController {
         }
     }
 
-    func delete(req: Request) -> EventLoopFuture<HTTPStatus> {
+    internal func delete(req: Request) -> EventLoopFuture<HTTPStatus> {
         T.fetch(from: "id", on: req)
             .flatMap { $0.delete(on: req.db) }.map { .ok }
     }
 }
 
 extension CrudController where T: Createable {
-    func create(req: Request) throws -> EventLoopFuture<T.Public> {
+    internal func create(req: Request) throws -> EventLoopFuture<T.Public> {
         try T.Create.validate(on: req)
         let data = try req.content.decode(T.Create.self)
         let model = try T.init(from: data)
@@ -46,7 +46,7 @@ extension CrudController where T: Createable {
 }
 
 extension CrudController where T: Replaceable {
-    func replace(req: Request) throws -> EventLoopFuture<T.Public> {
+    internal func replace(req: Request) throws -> EventLoopFuture<T.Public> {
         try T.Replace.validate(on: req)
         let data = try req.content.decode(T.Replace.self)
         return T.fetch(from: "id", on: req).flatMap { model in
@@ -61,7 +61,7 @@ extension CrudController where T: Replaceable {
 }
 
 extension CrudController where T: Patchable {
-    func patch(req: Request) throws -> EventLoopFuture<T.Public> {
+    internal func patch(req: Request) throws -> EventLoopFuture<T.Public> {
         try T.Patch.validate(on: req)
         let data = try req.content.decode(T.Patch.self)
         return T.fetch(from: "id", on: req).flatMap { model in
