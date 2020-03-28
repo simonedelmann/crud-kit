@@ -46,7 +46,7 @@ extension Todo: Publicable {
 ##### Registering routes in `routes.swift`
 
 ```swift
-app.grouped("todos").crud(model: Todo.self)
+app.crud("todos", model: Todo.self)
 ```
 
 This will register basic crud routes:
@@ -172,11 +172,5 @@ extension Todo.Patch: Validatable {
 ##### Get rid of `Publicable` requirement
 
 Currently it is required to conform to `Publicable`. In the future this package should be usable out of the box without any changes to any models. 
-
-##### Improve route registering
-
-To choose the correct method from crudController depending on which protocols the model conforms to, currently there is a lot of repeated code required. Any ideas to simplify are very much appreciated.
-
-Also currently you have to name your routes by using `.group` or `.grouped`. It is planned to add overloaded methods for `.crud(_ path: [PathComponent])`, ...
 
 ##### Relationship support

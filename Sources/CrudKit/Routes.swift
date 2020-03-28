@@ -2,79 +2,103 @@ import Vapor
 import Fluent
 
 extension RoutesBuilder {
-    public func crud<T: Model & Content & Publicable>(model: T.Type) where T.IDValue: LosslessStringConvertible {
-        let crudController = CrudController<T>()
-        self.get(use: crudController.indexAll)
-        self.get(":id", use: crudController.index)
-        self.post(use: crudController.create)
-        self.put(":id", use: crudController.replace)
-        self.delete(":id", use: crudController.delete)
+    public func crud<T: Model & Content & Publicable>(_ endpoint: String, model: T.Type) where T.IDValue: LosslessStringConvertible {
+        let controller = CrudController<T>()
+        let routes = self.grouped(PathComponent(stringLiteral: endpoint))
+        let idComponent = PathComponent(stringLiteral: ":\(controller.idComponentKey)")
+        
+        routes.get(use: controller.indexAll)
+        routes.get(idComponent, use: controller.index)
+        routes.post(use: controller.create)
+        routes.put(idComponent, use: controller.replace)
+        routes.delete(idComponent, use: controller.delete)
     }
     
-    public func crud<T: Model & Content & Publicable & Createable>(model: T.Type) where T.IDValue: LosslessStringConvertible {
-        let crudController = CrudController<T>()
-        self.get(use: crudController.indexAll)
-        self.get(":id", use: crudController.index)
-        self.post(use: crudController.create)
-        self.put(":id", use: crudController.replace)
-        self.delete(":id", use: crudController.delete)
+    public func crud<T: Model & Content & Publicable & Createable>(_ endpoint: String, model: T.Type) where T.IDValue: LosslessStringConvertible {
+        let controller = CrudController<T>()
+        let routes = self.grouped(PathComponent(stringLiteral: endpoint))
+        let idComponent = PathComponent(stringLiteral: ":\(controller.idComponentKey)")
+        
+        routes.get(use: controller.indexAll)
+        routes.get(idComponent, use: controller.index)
+        routes.post(use: controller.create)
+        routes.put(idComponent, use: controller.replace)
+        routes.delete(idComponent, use: controller.delete)
     }
     
-    public func crud<T: Model & Content & Publicable & Replaceable>(model: T.Type) where T.IDValue: LosslessStringConvertible {
-        let crudController = CrudController<T>()
-        self.get(use: crudController.indexAll)
-        self.get(":id", use: crudController.index)
-        self.post(use: crudController.create)
-        self.put(":id", use: crudController.replace)
-        self.delete(":id", use: crudController.delete)
+    public func crud<T: Model & Content & Publicable & Replaceable>(_ endpoint: String, model: T.Type) where T.IDValue: LosslessStringConvertible {
+        let controller = CrudController<T>()
+        let routes = self.grouped(PathComponent(stringLiteral: endpoint))
+        let idComponent = PathComponent(stringLiteral: ":\(controller.idComponentKey)")
+        
+        routes.get(use: controller.indexAll)
+        routes.get(idComponent, use: controller.index)
+        routes.post(use: controller.create)
+        routes.put(idComponent, use: controller.replace)
+        routes.delete(idComponent, use: controller.delete)
     }
     
-    public func crud<T: Model & Content & Publicable & Createable & Replaceable>(model: T.Type) where T.IDValue: LosslessStringConvertible {
-        let crudController = CrudController<T>()
-        self.get(use: crudController.indexAll)
-        self.get(":id", use: crudController.index)
-        self.post(use: crudController.create)
-        self.put(":id", use: crudController.replace)
-        self.delete(":id", use: crudController.delete)
+    public func crud<T: Model & Content & Publicable & Createable & Replaceable>(_ endpoint: String, model: T.Type) where T.IDValue: LosslessStringConvertible {
+        let controller = CrudController<T>()
+        let routes = self.grouped(PathComponent(stringLiteral: endpoint))
+        let idComponent = PathComponent(stringLiteral: ":\(controller.idComponentKey)")
+        
+        routes.get(use: controller.indexAll)
+        routes.get(idComponent, use: controller.index)
+        routes.post(use: controller.create)
+        routes.put(idComponent, use: controller.replace)
+        routes.delete(idComponent, use: controller.delete)
     }
     
-    public func crud<T: Model & Content & Publicable & Patchable>(model: T.Type) where T.IDValue: LosslessStringConvertible {
-        let crudController = CrudController<T>()
-        self.get(use: crudController.indexAll)
-        self.get(":id", use: crudController.index)
-        self.post(use: crudController.create)
-        self.put(":id", use: crudController.replace)
-        self.patch(":id", use: crudController.patch)
-        self.delete(":id", use: crudController.delete)
+    public func crud<T: Model & Content & Publicable & Patchable>(_ endpoint: String, model: T.Type) where T.IDValue: LosslessStringConvertible {
+        let controller = CrudController<T>()
+        let routes = self.grouped(PathComponent(stringLiteral: endpoint))
+        let idComponent = PathComponent(stringLiteral: ":\(controller.idComponentKey)")
+        
+        routes.get(use: controller.indexAll)
+        routes.get(idComponent, use: controller.index)
+        routes.post(use: controller.create)
+        routes.put(idComponent, use: controller.replace)
+        routes.delete(idComponent, use: controller.delete)
+        routes.patch(idComponent, use: controller.patch)
     }
     
-    public func crud<T: Model & Content & Publicable & Createable & Patchable>(model: T.Type) where T.IDValue: LosslessStringConvertible {
-        let crudController = CrudController<T>()
-        self.get(use: crudController.indexAll)
-        self.get(":id", use: crudController.index)
-        self.post(use: crudController.create)
-        self.put(":id", use: crudController.replace)
-        self.patch(":id", use: crudController.patch)
-        self.delete(":id", use: crudController.delete)
+    public func crud<T: Model & Content & Publicable & Createable & Patchable>(_ endpoint: String, model: T.Type) where T.IDValue: LosslessStringConvertible {
+        let controller = CrudController<T>()
+        let routes = self.grouped(PathComponent(stringLiteral: endpoint))
+        let idComponent = PathComponent(stringLiteral: ":\(controller.idComponentKey)")
+        
+        routes.get(use: controller.indexAll)
+        routes.get(idComponent, use: controller.index)
+        routes.post(use: controller.create)
+        routes.put(idComponent, use: controller.replace)
+        routes.delete(idComponent, use: controller.delete)
+        routes.patch(idComponent, use: controller.patch)
     }
     
-    public func crud<T: Model & Content & Publicable & Replaceable & Patchable>(model: T.Type) where T.IDValue: LosslessStringConvertible {
-        let crudController = CrudController<T>()
-        self.get(use: crudController.indexAll)
-        self.get(":id", use: crudController.index)
-        self.post(use: crudController.create)
-        self.put(":id", use: crudController.replace)
-        self.patch(":id", use: crudController.patch)
-        self.delete(":id", use: crudController.delete)
+    public func crud<T: Model & Content & Publicable & Replaceable & Patchable>(_ endpoint: String, model: T.Type) where T.IDValue: LosslessStringConvertible {
+        let controller = CrudController<T>()
+        let routes = self.grouped(PathComponent(stringLiteral: endpoint))
+        let idComponent = PathComponent(stringLiteral: ":\(controller.idComponentKey)")
+        
+        routes.get(use: controller.indexAll)
+        routes.get(idComponent, use: controller.index)
+        routes.post(use: controller.create)
+        routes.put(idComponent, use: controller.replace)
+        routes.delete(idComponent, use: controller.delete)
+        routes.patch(idComponent, use: controller.patch)
     }
     
-    public func crud<T: Model & Content & Publicable & Createable & Replaceable & Patchable>(model: T.Type) where T.IDValue: LosslessStringConvertible {
-        let crudController = CrudController<T>()
-        self.get(use: crudController.indexAll)
-        self.get(":id", use: crudController.index)
-        self.post(use: crudController.create)
-        self.put(":id", use: crudController.replace)
-        self.patch(":id", use: crudController.patch)
-        self.delete(":id", use: crudController.delete)
+    public func crud<T: Model & Content & Publicable & Createable & Replaceable & Patchable>(_ endpoint: String, model: T.Type) where T.IDValue: LosslessStringConvertible {
+        let controller = CrudController<T>()
+        let routes = self.grouped(PathComponent(stringLiteral: endpoint))
+        let idComponent = PathComponent(stringLiteral: ":\(controller.idComponentKey)")
+        
+        routes.get(use: controller.indexAll)
+        routes.get(idComponent, use: controller.index)
+        routes.post(use: controller.create)
+        routes.put(idComponent, use: controller.replace)
+        routes.delete(idComponent, use: controller.delete)
+        routes.patch(idComponent, use: controller.patch)
     }
 }

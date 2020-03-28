@@ -4,6 +4,8 @@ import Fluent
 struct CrudController<T: Model & Content & Publicable> where T.IDValue: LosslessStringConvertible { }
 
 extension CrudController {
+    var idComponentKey: String { "id" }
+    
     func indexAll(req: Request) -> EventLoopFuture<[T.Public]> {
         T.query(on: req.db).all().public()
     }
