@@ -11,7 +11,7 @@ extension CrudController {
     }
     
     internal func index(req: Request) -> EventLoopFuture<T.Public> {
-        T.fetch(from: "id", on: req).public()
+        T.fetch(from: idComponentKey, on: req).public()
     }
     
     internal func create(req: Request) throws -> EventLoopFuture<T.Public> {
@@ -23,7 +23,7 @@ extension CrudController {
     internal func replace(req: Request) throws -> EventLoopFuture<T.Public> {
         try T.validate(on: req)
         let data = try req.content.decode(T.self)
-        return T.fetch(from: "id", on: req).flatMap {
+        return T.fetch(from: idComponentKey, on: req).flatMap {
             data.id = $0.id
             data._$id.exists = true
             return data.update(on: req.db).map { data }.public()
@@ -31,7 +31,7 @@ extension CrudController {
     }
 
     internal func delete(req: Request) -> EventLoopFuture<HTTPStatus> {
-        T.fetch(from: "id", on: req)
+        T.fetch(from: idComponentKey, on: req)
             .flatMap { $0.delete(on: req.db) }.map { .ok }
     }
 }
@@ -49,7 +49,7 @@ extension CrudController where T: Replaceable {
     internal func replace(req: Request) throws -> EventLoopFuture<T.Public> {
         try T.Replace.validate(on: req)
         let data = try req.content.decode(T.Replace.self)
-        return T.fetch(from: "id", on: req).flatMap { model in
+        return T.fetch(from: idComponentKey, on: req).flatMap { model in
             do {
                 try model.replace(with: data)
                 return model.update(on: req.db).map { model }.public()
@@ -64,7 +64,7 @@ extension CrudController where T: Patchable {
     internal func patch(req: Request) throws -> EventLoopFuture<T.Public> {
         try T.Patch.validate(on: req)
         let data = try req.content.decode(T.Patch.self)
-        return T.fetch(from: "id", on: req).flatMap { model in
+        return T.fetch(from: idComponentKey, on: req).flatMap { model in
             do {
                 try model.patch(with: data)
                 return model.update(on: req.db).map { model }.public()
