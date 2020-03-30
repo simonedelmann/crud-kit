@@ -1,7 +1,7 @@
 import Vapor
 import Fluent
 
-internal struct CrudController<T: Model & Content & Publicable> where T.IDValue: LosslessStringConvertible {
+internal struct CrudController<T: Model & Crudable> where T.IDValue: LosslessStringConvertible {
     var idComponentKey: String
 }
 
@@ -15,37 +15,12 @@ extension CrudController {
     }
     
     internal func create(req: Request) throws -> EventLoopFuture<T.Public> {
-        try T.validate(on: req)
-        let data = try req.content.decode(T.self)
-        return data.save(on: req.db).map { data }.public()
-    }
-
-    internal func replace(req: Request) throws -> EventLoopFuture<T.Public> {
-        try T.validate(on: req)
-        let data = try req.content.decode(T.self)
-        return T.fetch(from: idComponentKey, on: req).flatMap {
-            data.id = $0.id
-            data._$id.exists = true
-            return data.update(on: req.db).map { data }.public()
-        }
-    }
-
-    internal func delete(req: Request) -> EventLoopFuture<HTTPStatus> {
-        T.fetch(from: idComponentKey, on: req)
-            .flatMap { $0.delete(on: req.db) }.map { .ok }
-    }
-}
-
-extension CrudController where T: Createable {
-    internal func create(req: Request) throws -> EventLoopFuture<T.Public> {
         try T.Create.validate(on: req)
         let data = try req.content.decode(T.Create.self)
         let model = try T.init(from: data)
         return model.save(on: req.db).map { model }.public()
     }
-}
 
-extension CrudController where T: Replaceable {
     internal func replace(req: Request) throws -> EventLoopFuture<T.Public> {
         try T.Replace.validate(on: req)
         let data = try req.content.decode(T.Replace.self)
@@ -59,6 +34,11 @@ extension CrudController where T: Replaceable {
                 return req.eventLoop.makeFailedFuture(error)
             }
         }
+    }
+
+    internal func delete(req: Request) -> EventLoopFuture<HTTPStatus> {
+        T.fetch(from: idComponentKey, on: req)
+            .flatMap { $0.delete(on: req.db) }.map { .ok }
     }
 }
 

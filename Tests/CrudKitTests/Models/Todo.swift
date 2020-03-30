@@ -19,6 +19,8 @@ final class Todo: Model, Content {
     }
 }
 
+extension Todo: Crudable { }
+
 extension Todo: Publicable {
     var `public`: Public {
         Public.init(id: id, title: title, isPublic: true)
