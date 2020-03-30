@@ -4,8 +4,7 @@ import Fluent
 extension RoutesBuilder {
     public func crud<T: Model & Crudable>(_ endpoint: String, model: T.Type, children: ((RoutesBuilder) -> ())? = nil) where T.IDValue: LosslessStringConvertible {
         let modelComponent = PathComponent(stringLiteral: endpoint)
-        let idComponentKey = "endpoint"
-        let idComponent = PathComponent(stringLiteral: ":\(idComponentKey)")
+        let idComponent = PathComponent(stringLiteral: ":\(endpoint)")
         let routes = self.grouped(modelComponent)
         let idRoutes = routes.grouped(idComponent)
         
@@ -21,12 +20,11 @@ extension RoutesBuilder {
     
     public func crud<T: Model & Crudable & Patchable>(_ endpoint: String, model: T.Type, children: ((RoutesBuilder) -> ())? = nil) where T.IDValue: LosslessStringConvertible {
         let modelComponent = PathComponent(stringLiteral: endpoint)
-        let idComponentKey = "endpoint"
-        let idComponent = PathComponent(stringLiteral: ":\(idComponentKey)")
+        let idComponent = PathComponent(stringLiteral: ":\(endpoint)")
         let routes = self.grouped(modelComponent)
         let idRoutes = routes.grouped(idComponent)
         
-        let controller = CrudController<T>(idComponentKey: idComponentKey)
+        let controller = CrudController<T>(idComponentKey: endpoint)
         routes.get(use: controller.indexAll)
         routes.post(use: controller.create)
         idRoutes.get(use: controller.index)
