@@ -19,5 +19,5 @@ final class SimpleTodo: Model, Content {
     }
 }
 
-extension SimpleTodo: Publicable {}
+extension SimpleTodo: Crudable {}
 
