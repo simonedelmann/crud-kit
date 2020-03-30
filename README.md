@@ -8,7 +8,7 @@ Add this package to your `Package.swift` as dependency and to your target.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/simonedelmann/crud-kit.git", from: "0.0.1")
+    .package(url: "https://github.com/simonedelmann/crud-kit.git", .branch("master"))
 ],
 targets: [
     .target(name: "App", dependencies: [
@@ -19,7 +19,7 @@ targets: [
 
 ## Basic Usage
 
-##### Conform you model to `Publicable`
+##### Conform you model to `Crudable`
 
 ```swift
 import CrudKit
@@ -37,10 +37,7 @@ final class Todo: Model, Content {
     // ...
 }
 
-extension Todo: Publicable {
-    // Use original model as public instance
-    func `public`() -> Todo { self }
-}
+extension Todo: Crudable { }
 ```
 
 ##### Registering routes in `routes.swift`
@@ -66,7 +63,7 @@ DELETE /todos/:id   # delete todo
 You can return a custom struct as public instance, which will be returned from all CRUD routes then.
 
 ```swift
-extension Todo: Publicable {
+extension Todo: Crudable {
     struct Public: Content {
         var title: String
         var done: Bool
@@ -80,10 +77,10 @@ extension Todo: Publicable {
 
 ##### Customize create / replace
 
-You can confirm your model to `Createable` to add specific logic while create. This is especially helpful, if your create request should take a subset of the models properties.
+You can add specific logic while create / replace. This is especially helpful, if your create / replace request should take a subset of the models properties or if you need to do special stuff while creating / replacing.
 
 ```swift
-extension Todo: Createable {
+extension Todo: Crudable {
     struct Create: Content {
         var title: String
     }
@@ -94,18 +91,21 @@ extension Todo: Createable {
         
         // Do custom stuff (e.g. hashing passwords)
     }
-}
 
-extension Todo: Replaceable {
     struct Replace: Content {
         var title: String
     }
     
-    func replace(with data: Replace) {
+    func replace(with data: Replace) -> Self {
         // Replace all properties manually
         self.title = data.title
         
         // Again you can add custom stuff here
+        
+        // Return self
+        return self
+        
+        // You can also return a new instance of your model, the id will be preserved.
     }
 }
 ```
@@ -167,10 +167,6 @@ extension Todo.Patch: Validatable {
 }
 ```
 
-## Planned features
-
-##### Get rid of `Publicable` requirement
-
-Currently it is required to conform to `Publicable`. In the future this package should be usable out of the box without any changes to any models. 
+## Planned features for release
 
 ##### Relationship support

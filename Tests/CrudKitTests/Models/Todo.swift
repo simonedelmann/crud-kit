@@ -19,21 +19,17 @@ final class Todo: Model, Content {
     }
 }
 
-extension Todo: Crudable { }
-
-extension Todo: Publicable {
-    var `public`: Public {
-        Public.init(id: id, title: title, isPublic: true)
-    }
-    
+extension Todo: Crudable {
     struct Public: Content {
         var id: Int?
         var title: String
         var isPublic: Bool
     }
-}
 
-extension Todo: Createable {
+    var `public`: Public {
+        Public.init(id: id, title: title, isPublic: true)
+    }
+
     struct Create: Content {
         var title: String
     }
@@ -41,15 +37,7 @@ extension Todo: Createable {
     convenience init(from data: Create) throws {
         self.init(title: data.title)
     }
-}
 
-extension Todo.Create: Validatable {
-    static func validations(_ validations: inout Validations) {
-        validations.add("title", as: String.self, is: .count(3...))
-    }
-}
-
-extension Todo: Replaceable {
     struct Replace: Content {
         var title: String
     }
@@ -57,6 +45,12 @@ extension Todo: Replaceable {
     func replace(with data: Replace) throws -> Self {
         self.title = data.title
         return self
+    }
+}
+
+extension Todo.Create: Validatable {
+    static func validations(_ validations: inout Validations) {
+        validations.add("title", as: String.self, is: .count(3...))
     }
 }
 
