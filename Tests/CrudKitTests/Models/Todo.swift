@@ -20,14 +20,14 @@ final class Todo: Model, Content {
 }
 
 extension Todo: Publicable {
+    var `public`: Public {
+        Public.init(id: id, title: title, isPublic: true)
+    }
+    
     struct Public: Content {
         var id: Int?
         var title: String
         var isPublic: Bool
-    }
-    
-    func `public`() -> Public {
-        Public.init(id: id, title: title, isPublic: true)
     }
 }
 

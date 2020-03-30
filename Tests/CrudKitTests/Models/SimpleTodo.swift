@@ -19,8 +19,5 @@ final class SimpleTodo: Model, Content {
     }
 }
 
-extension SimpleTodo: Publicable {
-    func `public`() -> SimpleTodo {
-        self
-    }
-}
+extension SimpleTodo: Publicable {}
+
