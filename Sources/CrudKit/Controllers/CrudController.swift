@@ -1,7 +1,7 @@
 import Vapor
 import Fluent
 
-internal struct CrudController<T: Model & Crudable> where T.IDValue: LosslessStringConvertible {
+public struct CrudController<T: Model & Crudable> where T.IDValue: LosslessStringConvertible {
     var idComponentKey: String
 }
 
