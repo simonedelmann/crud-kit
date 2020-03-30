@@ -18,6 +18,16 @@ final class RoutingTests: ApplicationXCTestCase {
             XCTAssertNotEqual(res.status, .notFound)
         }
     }
+    
+    func testCustomRouteRegistration() throws {
+        try routes()
+        
+        try app.test(.GET, "/todos/1/hello") { res in
+            XCTAssertEqual(res.status, .ok)
+            XCTAssertNotEqual(res.status, .notFound)
+            XCTAssertContains(res.body.string, "Hello World")
+        }
+    }
 
     static var allTests = [
         ("testNoRoutesRegistered", testNoRoutesRegistered),

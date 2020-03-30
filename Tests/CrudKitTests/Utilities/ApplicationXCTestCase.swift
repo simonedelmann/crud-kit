@@ -25,7 +25,9 @@ class ApplicationXCTestCase: XCTestCase {
     }
     
     func routes() throws {
-        app.crud("todos", model: Todo.self)
+        app.crud("todos", model: Todo.self) { routes in
+            routes.get("hello") { _ in "Hello World" }
+        }
         app.crud("simpletodos", model: SimpleTodo.self)
     }
 }

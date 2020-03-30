@@ -49,12 +49,14 @@ app.crud("todos", model: Todo.self)
 This will register basic crud routes:
 
 ```
-POST /todos         # create todo
-GET /todos          # get all todos
-GET /todos/:id      # get todo
-PUT /todos/:id      # replace todo
-DELETE /todos/:id   # delete todo
+POST /todos             # create todo
+GET /todos              # get all todos
+GET /todos/:todos       # get todo
+PUT /todos/:todos       # replace todo
+DELETE /todos/:todos    # delete todo
 ```
+
+Please note! The endpoints name (e.g. "todos") will be used as name for the named id parameter too. This is for avoiding duplications when having multiple parameters. 
 
 ## Additional features
 
@@ -115,7 +117,7 @@ extension Todo: Crudable {
 You can add patch support to your model by confirming to `Patchable`.
 
 ```
-PATCH /todos/:id      # patch todo
+PATCH /todos/:todos     # patch todo
 ```
 
 ```swift
@@ -136,7 +138,7 @@ extension Todo: Patchable {
 }
 ```
 
-##### Add validations
+##### Validations
 
 To add automatic validation, you just need to conform your model (or your custom structs) to `Validatable`. 
 
@@ -164,6 +166,18 @@ extension Todo.Patch: Validatable {
     static func validations(_ validations: inout Validations) {
         validations.add("title", as: String.self, is: .count(3...))
     }
+}
+```
+
+##### Custom routes
+
+**Experimental** You can add your own child routes via a closure to `.crud()`. 
+
+```swift
+// routes.swift
+app.crud("todos", model: Todo.self) { routes in
+    // GET /todos/:todos/hello 
+    routes.get("hello") { _ in "Hello World" }
 }
 ```
 
