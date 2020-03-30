@@ -19,7 +19,7 @@ targets: [
 
 ## Basic Usage
 
-##### Conform you model to `Crudable`
+### Conform you model to `Crudable`
 
 ```swift
 import CrudKit
@@ -40,7 +40,7 @@ final class Todo: Model, Content {
 extension Todo: Crudable { }
 ```
 
-##### Registering routes in `routes.swift`
+### Registering routes in `routes.swift`
 
 ```swift
 app.crud("todos", model: Todo.self)
@@ -60,7 +60,7 @@ Please note! The endpoints name (e.g. "todos") will be used as name for the name
 
 ## Additional features
 
-##### Custom public instance
+### Custom public instance
 
 You can return a custom struct as public instance, which will be returned from all CRUD routes then.
 
@@ -77,7 +77,7 @@ extension Todo: Crudable {
 }
 ```
 
-##### Customize create / replace
+### Customize create / replace
 
 You can add specific logic while create / replace. This is especially helpful, if your create / replace request should take a subset of the models properties or if you need to do special stuff while creating / replacing.
 
@@ -112,7 +112,7 @@ extension Todo: Crudable {
 }
 ```
 
-##### Patch support
+### Patch support
 
 You can add patch support to your model by confirming to `Patchable`.
 
@@ -138,7 +138,7 @@ extension Todo: Patchable {
 }
 ```
 
-##### Validations
+### Validations
 
 To add automatic validation, you just need to conform your model (or your custom structs) to `Validatable`. 
 
@@ -169,7 +169,7 @@ extension Todo.Patch: Validatable {
 }
 ```
 
-##### Custom routes
+### Custom routes
 
 **Experimental** You can add your own child routes via a closure to `.crud()`. 
 
@@ -183,4 +183,4 @@ app.crud("todos", model: Todo.self) { routes in
 
 ## Planned features for release
 
-##### Relationship support
+- Relationship support
