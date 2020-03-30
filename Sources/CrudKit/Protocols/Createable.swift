@@ -5,7 +5,7 @@ public protocol Createable: Content {
     init(from data: Create) throws
 }
 
-extension Createable where Create: Content, Create == Self {
+extension Createable where Create == Self {
     public init(from data: Create) throws {
         self = data
     }
