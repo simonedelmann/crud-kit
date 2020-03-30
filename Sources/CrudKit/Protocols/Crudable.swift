@@ -1,4 +1,4 @@
 import Vapor
 import Fluent
 
-public protocol Crudable: Publicable, Createable {}
+public protocol Crudable: Publicable, Createable, Replaceable {}

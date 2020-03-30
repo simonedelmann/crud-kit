@@ -1,6 +1,12 @@
 import Vapor
 
-public protocol Replaceable {
-    associatedtype Replace: Content
-    func replace(with data: Replace) throws
+public protocol Replaceable: Content {
+    associatedtype Replace: Content = Self
+    func replace(with data: Replace) throws -> Self
+}
+
+extension Replaceable where Replace == Self {
+    public func replace(with data: Replace) throws -> Self {
+        return data
+    }
 }

@@ -49,9 +49,11 @@ extension CrudController where T: Replaceable {
     internal func replace(req: Request) throws -> EventLoopFuture<T.Public> {
         try T.Replace.validate(on: req)
         let data = try req.content.decode(T.Replace.self)
-        return T.fetch(from: idComponentKey, on: req).flatMap { model in
+        return T.fetch(from: idComponentKey, on: req).flatMap { oldModel in
             do {
-                try model.replace(with: data)
+                let model = try oldModel.replace(with: data)
+                model.id = oldModel.id
+                model._$id.exists = oldModel._$id.exists
                 return model.update(on: req.db).map { model }.public()
             } catch {
                 return req.eventLoop.makeFailedFuture(error)
