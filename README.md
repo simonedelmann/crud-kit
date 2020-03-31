@@ -8,7 +8,7 @@ Add this package to your `Package.swift` as dependency and to your target.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/simonedelmann/crud-kit.git", .branch("master"))
+    .package(url: "https://github.com/simonedelmann/crud-kit.git", from: "1.0.0")
 ],
 targets: [
     .target(name: "App", dependencies: [
