@@ -62,10 +62,17 @@ extension CrudChildrenController {
 //        }
 //    }
 //
-//    internal func delete(req: Request) -> EventLoopFuture<HTTPStatus> {
-//        T.fetch(from: idComponentKey, on: req)
-//            .flatMap { $0.delete(on: req.db) }.map { .ok }
-//    }
+    internal func delete(req: Request) -> EventLoopFuture<HTTPStatus> {
+        guard let id = T.getID(from: idComponentKey, on: req) else {
+            return req.eventLoop.future(error: Abort(.notFound))
+        }
+        return ParentT.fetch(from: parentIdComponentKey, on: req).flatMap { parent in
+            parent[keyPath: self.children].query(on: req.db)
+                .filter(\._$id == id).first()
+                .unwrap(or: Abort(.notFound))
+                .flatMap { $0.delete(on: req.db) }.map { .ok }
+        }
+    }
 }
 
 extension CrudChildrenController where T: Patchable {

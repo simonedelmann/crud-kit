@@ -48,7 +48,7 @@ extension RoutesBuilder {
         routes.post(use: controller.create)
         idRoutes.get(use: controller.index)
 //        idRoutes.put(use: controller.replace)
-//        idRoutes.delete(use: controller.delete)
+        idRoutes.delete(use: controller.delete)
                 
         custom?(idRoutes, controller)
     }
