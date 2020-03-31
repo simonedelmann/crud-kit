@@ -15,10 +15,18 @@ extension CrudChildrenController {
         }
     }
     
-//    internal func index(req: Request) -> EventLoopFuture<T.Public> {
-//        T.fetch(from: idComponentKey, on: req).public()
-//    }
-//
+    internal func index(req: Request) -> EventLoopFuture<T.Public> {
+        guard let id = T.getID(from: idComponentKey, on: req) else {
+            return req.eventLoop.future(error: Abort(.notFound))
+        }
+        return ParentT.fetch(from: parentIdComponentKey, on: req).flatMap { parent in
+            parent[keyPath: self.children].query(on: req.db)
+                .filter(\._$id == id).first()
+                .unwrap(or: Abort(.notFound))
+                .public()
+        }
+    }
+
 //    internal func create(req: Request) throws -> EventLoopFuture<T.Public> {
 //        try T.Create.validate(on: req)
 //        let data = try req.content.decode(T.Create.self)
