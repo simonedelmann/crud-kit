@@ -175,12 +175,126 @@ extension Todo.Patch: Validatable {
 
 ```swift
 // routes.swift
-app.crud("todos", model: Todo.self) { routes in
+app.crud("todos", model: Todo.self) { routes, _ in
     // GET /todos/:todos/hello 
     routes.get("hello") { _ in "Hello World" }
 }
 ```
 
-## Planned features for release
+### Relationship support
 
-- Relationship support
+**Experimental** Currently only Children relations are supported. See example below...
+
+```swift
+// Todo -> Tag
+final class Todo: Model, Content {
+    @Children(for: \.todo)
+    var tags: [Tag]
+    
+    // ...
+}
+
+final class Tag: Model, Content { 
+    @Parent(key: "todo_id")
+    var todo: Todo
+    
+    // ...
+}
+
+extension Todo: Crudable { }
+extension Tag: Crudable { }
+
+// routes.swift
+app.crud("todos", model: Todo.self) { routes, parentController in
+    routes.crud("tags", children: Tag.self, on: parentController, via: \.$tags)
+}
+```
+
+This will register crud routes for tags:
+
+```
+POST /todos/:todos/tags             # create tag
+GET /todos/:todos/tags              # get all tags
+GET /todos/:todos/tags/:tags        # get tag
+PUT /todos/:todos/tags/:tags        # replace tag
+PATCH /todos/:todos/tags/:tags      # patch tag (if Tag conforms to Patchable)
+DELETE /todos/:todos/tags/:tags     # delete tag
+```
+
+Children relations support all features (public instances, custom create/replace, patch support, validations).
+
+#### Notes on parent's id within payload
+
+Currently Vapor does require to add the parent's id into a create / replace request. 
+
+```swift
+final class Tag: Model, Content {
+    // ...
+    
+    @Parent(key: "todo_id")
+    var todo: Todo
+    
+    init(id: Tag.IDValue? = nil, title: String, todo_id: Todo.IDValue) {
+        // ...
+        self.$todo.id = todo_id
+    }
+}
+
+extension Tag: Crudable { }
+```
+This requires a create payload like this:
+```
+{
+    title: "Foo",
+    todo {
+        id: 1 
+    }
+}
+```
+
+You can avoid that using a custom create / replace struct. This package will take care and fill the correct id for you.
+
+```swift
+final class Tag: Model, Content {
+    // ...
+    
+    @Parent(key: "todo_id")
+    var todo: Todo
+    
+    // Make todo_id parameter optional
+    init(id: Tag.IDValue? = nil, title: String, todo_id: Todo.IDValue?) {
+        // ...
+        
+        // Use if let for unwrapping the optional
+        if let todo = todo_id {
+            self.$todo.id = todo
+        }
+    }
+}
+
+extension Tag: Crudable {
+    struct Create: Content {
+        var title: String
+        var todo_id: Todo.IDValue?
+    }
+
+    convenience init(from data: Create) throws {
+        self.init(title: data.title, todo_id: data.todo_id)
+    }
+
+    struct Replace: Content {
+        var title: String
+        var todo_id: Todo.IDValue?
+    }
+
+    func replace(with data: Replace) throws -> Self {
+        Self.init(title: data.title, todo_id: data.todo_id)
+    }
+}
+```
+Then you can create a child without parent id within payload.
+```
+{
+    title: "Foo"
+}
+```
