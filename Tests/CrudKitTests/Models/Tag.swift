@@ -34,6 +34,25 @@ extension Tag: Crudable {
     convenience init(from data: Create) throws {
         self.init(title: data.title, todo_id: data.todo_id)
     }
+    
+    struct Replace: Content {
+        var title: String
+        var todo_id: Todo.IDValue?
+    }
+    
+    func replace(with data: Replace) throws -> Self {
+        Self.init(title: data.title, todo_id: data.todo_id)
+    }
+}
+
+extension Tag: Patchable {
+    struct Patch: Content {
+        var title: String?
+    }
+
+    func patch(with data: Patch) throws {
+        self.title = data.title ?? self.title
+    }
 }
 
 extension Tag {
