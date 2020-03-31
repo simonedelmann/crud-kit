@@ -45,7 +45,7 @@ extension RoutesBuilder {
         
         let controller = CrudChildrenController<T, ParentT>(idComponentKey: endpoint, parentIdComponentKey: parentController.idComponentKey, children: keypath)
         routes.get(use: controller.indexAll)
-//        routes.post(use: controller.create)
+        routes.post(use: controller.create)
         idRoutes.get(use: controller.index)
 //        idRoutes.put(use: controller.replace)
 //        idRoutes.delete(use: controller.delete)

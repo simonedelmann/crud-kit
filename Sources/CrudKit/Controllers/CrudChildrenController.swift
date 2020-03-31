@@ -9,6 +9,15 @@ public struct CrudChildrenController<T: Model & Crudable, ParentT: Model> where 
 }
 
 extension CrudChildrenController {
+    var parent: KeyPath<T, ParentProperty<T, ParentT>> {
+        switch ParentT()[keyPath: self.children].parentKey {
+        case .required(let required):
+            return required
+        case .optional(_):
+            fatalError("OptionalParent currently not supported")
+        }
+    }
+
     internal func indexAll(req: Request) -> EventLoopFuture<[T.Public]> {
         ParentT.fetch(from: parentIdComponentKey, on: req).flatMap { parent in
             parent[keyPath: self.children].query(on: req.db).all().public()
@@ -27,13 +36,17 @@ extension CrudChildrenController {
         }
     }
 
-//    internal func create(req: Request) throws -> EventLoopFuture<T.Public> {
-//        try T.Create.validate(on: req)
-//        let data = try req.content.decode(T.Create.self)
-//        let model = try T.init(from: data)
-//        return model.save(on: req.db).map { model }.public()
-//    }
-//
+    internal func create(req: Request) throws -> EventLoopFuture<T.Public> {
+        try T.Create.validate(on: req)
+        let data = try req.content.decode(T.Create.self)
+        let model = try T.init(from: data)
+        return ParentT.fetch(from: parentIdComponentKey, on: req).flatMap { parent in
+            model[keyPath: self.parent].id = parent.id!
+            return parent[keyPath: self.children].create(model, on: req.db)
+                .map { model }.public()
+        }
+    }
+
 //    internal func replace(req: Request) throws -> EventLoopFuture<T.Public> {
 //        try T.Replace.validate(on: req)
 //        let data = try req.content.decode(T.Replace.self)
