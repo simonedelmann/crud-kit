@@ -1,14 +1,14 @@
 import Vapor
 import Fluent
 
-public struct CrudChildrenController<T: Model & Crudable, ParentT: Model> where T.IDValue: LosslessStringConvertible, ParentT.IDValue: LosslessStringConvertible {
+public struct CRUDChildrenController<T: Model & CRUDModel, ParentT: Model> where T.IDValue: LosslessStringConvertible, ParentT.IDValue: LosslessStringConvertible {
     var idComponentKey: String
     var parentIdComponentKey: String
     
     var children: KeyPath<ParentT, ChildrenProperty<ParentT, T>>
 }
 
-extension CrudChildrenController {
+extension CRUDChildrenController {
     var parent: KeyPath<T, ParentProperty<T, ParentT>> {
         switch ParentT()[keyPath: self.children].parentKey {
         case .required(let required):
@@ -84,7 +84,7 @@ extension CrudChildrenController {
     }
 }
 
-extension CrudChildrenController where T: Patchable {
+extension CRUDChildrenController where T: Patchable {
     internal func patch(req: Request) throws -> EventLoopFuture<T.Public> {
         guard let id = T.getID(from: idComponentKey, on: req) else {
             return req.eventLoop.future(error: Abort(.notFound))

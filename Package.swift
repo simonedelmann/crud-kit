@@ -7,7 +7,7 @@ let package = Package(
        .macOS(.v10_15)
     ],
     products: [
-        .library(name: "CrudKit", targets: ["CrudKit"]),
+        .library(name: "CRUDKit", targets: ["CRUDKit"]),
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0-beta"),
@@ -16,15 +16,15 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "CrudKit",
+            name: "CRUDKit",
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "Fluent", package: "fluent")
         ]),
         .testTarget(
-            name: "CrudKitTests",
+            name: "CRUDKitTests",
             dependencies: [
-                .target(name: "CrudKit"),
+                .target(name: "CRUDKit"),
                 .product(name: "XCTVapor", package: "vapor"),
                 .product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver")
         ]),

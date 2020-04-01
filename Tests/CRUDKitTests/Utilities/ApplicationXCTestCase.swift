@@ -1,4 +1,4 @@
-@testable import CrudKit
+@testable import CRUDKit
 import XCTVapor
 import Vapor
 import Fluent

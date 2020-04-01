@@ -1,4 +1,4 @@
-# CrudKit for Vapor 4
+# CRUDKit for Vapor 4
 
 We all write CRUD (Create-Read-Update-Delete) routes all the time. The intention of this package is to reduce repeating code and to provide a fast start for an API. 
 
@@ -12,17 +12,17 @@ dependencies: [
 ],
 targets: [
     .target(name: "App", dependencies: [
-        .product(name: "CrudKit", package: "crud-kit")
+        .product(name: "CRUDKit", package: "crud-kit")
     ])
 ]
 ```
 
 ## Basic Usage
 
-### Conform you model to `Crudable`
+### Conform you model to `CRUDModel`
 
 ```swift
-import CrudKit
+import CRUDKit
 
 final class Todo: Model, Content {
     @ID()
@@ -37,7 +37,7 @@ final class Todo: Model, Content {
     // ...
 }
 
-extension Todo: Crudable { }
+extension Todo: CRUDModel { }
 ```
 
 ### Registering routes in `routes.swift`
@@ -46,7 +46,7 @@ extension Todo: Crudable { }
 app.crud("todos", model: Todo.self)
 ```
 
-This will register basic crud routes:
+This will register basic CRUD routes:
 
 ```
 POST /todos             # create todo
@@ -65,7 +65,7 @@ Please note! The endpoints name (e.g. "todos") will be used as name for the name
 You can return a custom struct as public instance, which will be returned from all CRUD routes then.
 
 ```swift
-extension Todo: Crudable {
+extension Todo: CRUDModel {
     struct Public: Content {
         var title: String
         var done: Bool
@@ -82,7 +82,7 @@ extension Todo: Crudable {
 You can add specific logic while create / replace. This is especially helpful, if your create / replace request should take a subset of the models properties or if you need to do special stuff while creating / replacing.
 
 ```swift
-extension Todo: Crudable {
+extension Todo: CRUDModel {
     struct Create: Content {
         var title: String
     }
@@ -201,8 +201,8 @@ final class Tag: Model, Content {
     // ...
 }
 
-extension Todo: Crudable { }
-extension Tag: Crudable { }
+extension Todo: CRUDModel { }
+extension Tag: CRUDModel { }
 
 // routes.swift
 app.crud("todos", model: Todo.self) { routes, parentController in
@@ -210,7 +210,7 @@ app.crud("todos", model: Todo.self) { routes, parentController in
 }
 ```
 
-This will register crud routes for tags:
+This will register CRUD routes for tags:
 
 ```
 POST /todos/:todos/tags             # create tag
@@ -240,7 +240,7 @@ final class Tag: Model, Content {
     }
 }
 
-extension Tag: Crudable { }
+extension Tag: CRUDModel { }
 ```
 This requires a create payload like this:
 ```
@@ -272,7 +272,7 @@ final class Tag: Model, Content {
     }
 }
 
-extension Tag: Crudable {
+extension Tag: CRUDModel {
     struct Create: Content {
         var title: String
         var todo_id: Todo.IDValue?

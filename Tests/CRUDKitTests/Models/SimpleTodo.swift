@@ -1,6 +1,6 @@
 import Vapor
 import Fluent
-import CrudKit
+import CRUDKit
 
 final class SimpleTodo: Model, Content {
     static var schema = "todos"
@@ -19,5 +19,5 @@ final class SimpleTodo: Model, Content {
     }
 }
 
-extension SimpleTodo: Crudable {}
+extension SimpleTodo: CRUDModel {}
 

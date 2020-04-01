@@ -1,11 +1,11 @@
 import Vapor
 import Fluent
 
-public struct CrudController<T: Model & Crudable> where T.IDValue: LosslessStringConvertible {
+public struct CRUDController<T: Model & CRUDModel> where T.IDValue: LosslessStringConvertible {
     var idComponentKey: String
 }
 
-extension CrudController {
+extension CRUDController {
     internal func indexAll(req: Request) -> EventLoopFuture<[T.Public]> {
         T.query(on: req.db).all().public()
     }
@@ -42,7 +42,7 @@ extension CrudController {
     }
 }
 
-extension CrudController where T: Patchable {
+extension CRUDController where T: Patchable {
     internal func patch(req: Request) throws -> EventLoopFuture<T.Public> {
         try T.Patch.validate(on: req)
         let data = try req.content.decode(T.Patch.self)

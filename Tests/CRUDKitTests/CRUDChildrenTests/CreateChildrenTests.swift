@@ -1,4 +1,4 @@
-@testable import CrudKit
+@testable import CRUDKit
 import XCTVapor
 
 final class CreateChildrenTests: ApplicationXCTestCase {

@@ -1,6 +1,6 @@
 import Vapor
 import Fluent
-import CrudKit
+import CRUDKit
 
 final class Todo: Model, Content {
     static var schema = "todos"
@@ -22,7 +22,7 @@ final class Todo: Model, Content {
     }
 }
 
-extension Todo: Crudable {
+extension Todo: CRUDModel {
     struct Public: Content {
         var id: Int?
         var title: String
