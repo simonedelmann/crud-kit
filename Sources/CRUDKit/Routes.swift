@@ -9,11 +9,7 @@ extension RoutesBuilder {
         let idRoutes = routes.grouped(idComponent)
         
         let controller = CRUDController<T>(idComponentKey: endpoint)
-        routes.get(use: controller.indexAll)
-        routes.post(use: controller.create)
-        idRoutes.get(use: controller.index)
-        idRoutes.put(use: controller.replace)
-        idRoutes.delete(use: controller.delete)
+        controller.setup(on: routes)
                 
         custom?(idRoutes, controller)
     }
@@ -25,12 +21,7 @@ extension RoutesBuilder {
         let idRoutes = routes.grouped(idComponent)
         
         let controller = CRUDController<T>(idComponentKey: endpoint)
-        routes.get(use: controller.indexAll)
-        routes.post(use: controller.create)
-        idRoutes.get(use: controller.index)
-        idRoutes.put(use: controller.replace)
-        idRoutes.patch(use: controller.patch)
-        idRoutes.delete(use: controller.delete)
+        controller.setup(on: routes)
                 
         custom?(idRoutes, controller)
     }
@@ -44,11 +35,7 @@ extension RoutesBuilder {
         let idRoutes = routes.grouped(idComponent)
         
         let controller = CRUDChildrenController<T, ParentT>(idComponentKey: endpoint, parentIdComponentKey: parentController.idComponentKey, children: keypath)
-        routes.get(use: controller.indexAll)
-        routes.post(use: controller.create)
-        idRoutes.get(use: controller.index)
-        idRoutes.put(use: controller.replace)
-        idRoutes.delete(use: controller.delete)
+        controller.setup(on: routes)
                 
         custom?(idRoutes, controller)
     }
@@ -60,12 +47,7 @@ extension RoutesBuilder {
         let idRoutes = routes.grouped(idComponent)
         
         let controller = CRUDChildrenController<T, ParentT>(idComponentKey: endpoint, parentIdComponentKey: parentController.idComponentKey, children: keypath)
-        routes.get(use: controller.indexAll)
-        routes.post(use: controller.create)
-        idRoutes.get(use: controller.index)
-        idRoutes.put(use: controller.replace)
-        idRoutes.patch(use: controller.patch)
-        idRoutes.delete(use: controller.delete)
+        controller.setup(on: routes)
                 
         custom?(idRoutes, controller)
     }

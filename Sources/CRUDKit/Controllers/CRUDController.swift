@@ -1,11 +1,27 @@
 import Vapor
 import Fluent
 
-public struct CRUDController<T: Model & CRUDModel> where T.IDValue: LosslessStringConvertible {
-    var idComponentKey: String
+public struct CRUDController<T: Model & CRUDModel>: CRUDControllerProtocol where T.IDValue: LosslessStringConvertible {
+    public var idComponentKey: String
 }
 
-extension CRUDController {
+public protocol CRUDControllerProtocol {
+    associatedtype T: Model, CRUDModel where T.IDValue: LosslessStringConvertible
+    var idComponentKey: String { get }
+}
+
+extension CRUDControllerProtocol {
+    internal func setup(on routes: RoutesBuilder) {
+        let idComponent = PathComponent(stringLiteral: ":\(idComponentKey)")
+        let idRoutes = routes.grouped(idComponent)
+        
+        routes.get(use: self.indexAll)
+        routes.post(use: self.create)
+        idRoutes.get(use: self.index)
+        idRoutes.put(use: self.replace)
+        idRoutes.delete(use: self.delete)
+    }
+    
     internal func indexAll(req: Request) -> EventLoopFuture<[T.Public]> {
         T.query(on: req.db).all().public()
     }
@@ -42,7 +58,19 @@ extension CRUDController {
     }
 }
 
-extension CRUDController where T: Patchable {
+extension CRUDControllerProtocol where T: Patchable {
+    internal func setup(on routes: RoutesBuilder) {
+            let idComponent = PathComponent(stringLiteral: ":\(idComponentKey)")
+            let idRoutes = routes.grouped(idComponent)
+            
+            routes.get(use: self.indexAll)
+            routes.post(use: self.create)
+            idRoutes.get(use: self.index)
+            idRoutes.put(use: self.replace)
+            idRoutes.patch(use: self.patch)
+            idRoutes.delete(use: self.delete)
+        }
+    
     internal func patch(req: Request) throws -> EventLoopFuture<T.Public> {
         try T.Patch.validate(on: req)
         let data = try req.content.decode(T.Patch.self)

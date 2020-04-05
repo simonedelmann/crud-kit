@@ -1,14 +1,34 @@
 import Vapor
 import Fluent
 
-public struct CRUDChildrenController<T: Model & CRUDModel, ParentT: Model> where T.IDValue: LosslessStringConvertible, ParentT.IDValue: LosslessStringConvertible {
-    var idComponentKey: String
-    var parentIdComponentKey: String
+public struct CRUDChildrenController<T: Model & CRUDModel, ParentT: Model>: CRUDChildrenControllerProtocol where T.IDValue: LosslessStringConvertible, ParentT.IDValue: LosslessStringConvertible {
+    public var idComponentKey: String
+    public var parentIdComponentKey: String
+    public var children: KeyPath<ParentT, ChildrenProperty<ParentT, T>>
     
-    var children: KeyPath<ParentT, ChildrenProperty<ParentT, T>>
 }
 
-extension CRUDChildrenController {
+public protocol CRUDChildrenControllerProtocol {
+    associatedtype T: Model, CRUDModel where T.IDValue: LosslessStringConvertible
+    associatedtype ParentT: Model where ParentT.IDValue: LosslessStringConvertible
+    var idComponentKey: String { get }
+    var parentIdComponentKey: String { get }
+    
+    var children: KeyPath<ParentT, ChildrenProperty<ParentT, T>> { get }
+}
+
+extension CRUDChildrenControllerProtocol {
+    internal func setup(on routes: RoutesBuilder) {
+        let idComponent = PathComponent(stringLiteral: ":\(idComponentKey)")
+        let idRoutes = routes.grouped(idComponent)
+        
+        routes.get(use: self.indexAll)
+        routes.post(use: self.create)
+        idRoutes.get(use: self.index)
+        idRoutes.put(use: self.replace)
+        idRoutes.delete(use: self.delete)
+    }
+    
     var parent: KeyPath<T, ParentProperty<T, ParentT>> {
         switch ParentT()[keyPath: self.children].parentKey {
         case .required(let required):
@@ -84,7 +104,19 @@ extension CRUDChildrenController {
     }
 }
 
-extension CRUDChildrenController where T: Patchable {
+extension CRUDChildrenControllerProtocol where T: Patchable {
+    internal func setup(on routes: RoutesBuilder) {
+        let idComponent = PathComponent(stringLiteral: ":\(idComponentKey)")
+        let idRoutes = routes.grouped(idComponent)
+        
+        routes.get(use: self.indexAll)
+        routes.post(use: self.create)
+        idRoutes.get(use: self.index)
+        idRoutes.put(use: self.replace)
+        idRoutes.patch(use: self.patch)
+        idRoutes.delete(use: self.delete)
+    }
+    
     internal func patch(req: Request) throws -> EventLoopFuture<T.Public> {
         guard let id = T.getID(from: idComponentKey, on: req) else {
             return req.eventLoop.future(error: Abort(.notFound))
