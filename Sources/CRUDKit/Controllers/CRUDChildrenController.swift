@@ -18,8 +18,10 @@ public protocol CRUDChildrenControllerProtocol {
 }
 
 extension CRUDChildrenControllerProtocol {
-    internal func setup(on routes: RoutesBuilder) {
+    public func setup(_ routesBuilder: RoutesBuilder, on endpoint: String) {
+        let modelComponent = PathComponent(stringLiteral: endpoint)
         let idComponent = PathComponent(stringLiteral: ":\(idComponentKey)")
+        let routes = routesBuilder.grouped(modelComponent)
         let idRoutes = routes.grouped(idComponent)
         
         routes.get(use: self.indexAll)
@@ -29,7 +31,7 @@ extension CRUDChildrenControllerProtocol {
         idRoutes.delete(use: self.delete)
     }
     
-    var parent: KeyPath<T, ParentProperty<T, ParentT>> {
+    public var parent: KeyPath<T, ParentProperty<T, ParentT>> {
         switch ParentT()[keyPath: self.children].parentKey {
         case .required(let required):
             return required
@@ -38,13 +40,13 @@ extension CRUDChildrenControllerProtocol {
         }
     }
 
-    internal func indexAll(req: Request) -> EventLoopFuture<[T.Public]> {
+    public func indexAll(req: Request) -> EventLoopFuture<[T.Public]> {
         ParentT.fetch(from: parentIdComponentKey, on: req).flatMap { parent in
             parent[keyPath: self.children].query(on: req.db).all().public()
         }
     }
     
-    internal func index(req: Request) -> EventLoopFuture<T.Public> {
+    public func index(req: Request) -> EventLoopFuture<T.Public> {
         guard let id = T.getID(from: idComponentKey, on: req) else {
             return req.eventLoop.future(error: Abort(.notFound))
         }
@@ -56,7 +58,7 @@ extension CRUDChildrenControllerProtocol {
         }
     }
 
-    internal func create(req: Request) throws -> EventLoopFuture<T.Public> {
+    public func create(req: Request) throws -> EventLoopFuture<T.Public> {
         try T.Create.validate(on: req)
         let data = try req.content.decode(T.Create.self)
         let model = try T.init(from: data)
@@ -67,7 +69,7 @@ extension CRUDChildrenControllerProtocol {
         }
     }
 
-    internal func replace(req: Request) throws -> EventLoopFuture<T.Public> {
+    public func replace(req: Request) throws -> EventLoopFuture<T.Public> {
         guard let id = T.getID(from: idComponentKey, on: req) else {
             return req.eventLoop.future(error: Abort(.notFound))
         }
@@ -91,7 +93,7 @@ extension CRUDChildrenControllerProtocol {
         }
     }
 
-    internal func delete(req: Request) -> EventLoopFuture<HTTPStatus> {
+    public func delete(req: Request) -> EventLoopFuture<HTTPStatus> {
         guard let id = T.getID(from: idComponentKey, on: req) else {
             return req.eventLoop.future(error: Abort(.notFound))
         }
@@ -105,8 +107,10 @@ extension CRUDChildrenControllerProtocol {
 }
 
 extension CRUDChildrenControllerProtocol where T: Patchable {
-    internal func setup(on routes: RoutesBuilder) {
+    public func setup(_ routesBuilder: RoutesBuilder, on endpoint: String) {
+        let modelComponent = PathComponent(stringLiteral: endpoint)
         let idComponent = PathComponent(stringLiteral: ":\(idComponentKey)")
+        let routes = routesBuilder.grouped(modelComponent)
         let idRoutes = routes.grouped(idComponent)
         
         routes.get(use: self.indexAll)
@@ -117,7 +121,7 @@ extension CRUDChildrenControllerProtocol where T: Patchable {
         idRoutes.delete(use: self.delete)
     }
     
-    internal func patch(req: Request) throws -> EventLoopFuture<T.Public> {
+    public func patch(req: Request) throws -> EventLoopFuture<T.Public> {
         guard let id = T.getID(from: idComponentKey, on: req) else {
             return req.eventLoop.future(error: Abort(.notFound))
         }

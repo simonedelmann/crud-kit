@@ -11,8 +11,10 @@ public protocol CRUDControllerProtocol {
 }
 
 extension CRUDControllerProtocol {
-    internal func setup(on routes: RoutesBuilder) {
+    public func setup(_ routesBuilder: RoutesBuilder, on endpoint: String) {
+        let modelComponent = PathComponent(stringLiteral: endpoint)
         let idComponent = PathComponent(stringLiteral: ":\(idComponentKey)")
+        let routes = routesBuilder.grouped(modelComponent)
         let idRoutes = routes.grouped(idComponent)
         
         routes.get(use: self.indexAll)
@@ -22,22 +24,22 @@ extension CRUDControllerProtocol {
         idRoutes.delete(use: self.delete)
     }
     
-    internal func indexAll(req: Request) -> EventLoopFuture<[T.Public]> {
+    public func indexAll(req: Request) -> EventLoopFuture<[T.Public]> {
         T.query(on: req.db).all().public()
     }
     
-    internal func index(req: Request) -> EventLoopFuture<T.Public> {
+    public func index(req: Request) -> EventLoopFuture<T.Public> {
         T.fetch(from: idComponentKey, on: req).public()
     }
     
-    internal func create(req: Request) throws -> EventLoopFuture<T.Public> {
+    public func create(req: Request) throws -> EventLoopFuture<T.Public> {
         try T.Create.validate(on: req)
         let data = try req.content.decode(T.Create.self)
         let model = try T.init(from: data)
         return model.save(on: req.db).map { model }.public()
     }
 
-    internal func replace(req: Request) throws -> EventLoopFuture<T.Public> {
+    public func replace(req: Request) throws -> EventLoopFuture<T.Public> {
         try T.Replace.validate(on: req)
         let data = try req.content.decode(T.Replace.self)
         return T.fetch(from: idComponentKey, on: req).flatMap { oldModel in
@@ -52,15 +54,17 @@ extension CRUDControllerProtocol {
         }
     }
 
-    internal func delete(req: Request) -> EventLoopFuture<HTTPStatus> {
+    public func delete(req: Request) -> EventLoopFuture<HTTPStatus> {
         T.fetch(from: idComponentKey, on: req)
             .flatMap { $0.delete(on: req.db) }.map { .ok }
     }
 }
 
 extension CRUDControllerProtocol where T: Patchable {
-    internal func setup(on routes: RoutesBuilder) {
+    public func setup(_ routesBuilder: RoutesBuilder, on endpoint: String) {
+            let modelComponent = PathComponent(stringLiteral: endpoint)
             let idComponent = PathComponent(stringLiteral: ":\(idComponentKey)")
+            let routes = routesBuilder.grouped(modelComponent)
             let idRoutes = routes.grouped(idComponent)
             
             routes.get(use: self.indexAll)
@@ -71,7 +75,7 @@ extension CRUDControllerProtocol where T: Patchable {
             idRoutes.delete(use: self.delete)
         }
     
-    internal func patch(req: Request) throws -> EventLoopFuture<T.Public> {
+    public func patch(req: Request) throws -> EventLoopFuture<T.Public> {
         try T.Patch.validate(on: req)
         let data = try req.content.decode(T.Patch.self)
         return T.fetch(from: idComponentKey, on: req).flatMap { model in

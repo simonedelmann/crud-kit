@@ -9,7 +9,7 @@ extension RoutesBuilder {
         let idRoutes = routes.grouped(idComponent)
         
         let controller = CRUDController<T>(idComponentKey: endpoint)
-        controller.setup(on: routes)
+        controller.setup(self, on: endpoint)
                 
         custom?(idRoutes, controller)
     }
@@ -21,7 +21,7 @@ extension RoutesBuilder {
         let idRoutes = routes.grouped(idComponent)
         
         let controller = CRUDController<T>(idComponentKey: endpoint)
-        controller.setup(on: routes)
+        controller.setup(self, on: endpoint)
                 
         custom?(idRoutes, controller)
     }
@@ -35,7 +35,7 @@ extension RoutesBuilder {
         let idRoutes = routes.grouped(idComponent)
         
         let controller = CRUDChildrenController<T, ParentT>(idComponentKey: endpoint, parentIdComponentKey: parentController.idComponentKey, children: keypath)
-        controller.setup(on: routes)
+        controller.setup(self, on: endpoint)
                 
         custom?(idRoutes, controller)
     }
@@ -47,7 +47,7 @@ extension RoutesBuilder {
         let idRoutes = routes.grouped(idComponent)
         
         let controller = CRUDChildrenController<T, ParentT>(idComponentKey: endpoint, parentIdComponentKey: parentController.idComponentKey, children: keypath)
-        controller.setup(on: routes)
+        controller.setup(self, on: endpoint)
                 
         custom?(idRoutes, controller)
     }
