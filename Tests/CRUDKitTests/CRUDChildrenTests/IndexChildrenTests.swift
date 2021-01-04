@@ -6,11 +6,11 @@ final class IndexChildrenTests: ApplicationXCTestCase {
         try routes()
         try seed()
         
-        try app.test(.GET, "/todos/1/tags/") { res in
+        try app.test(.GET, "/todos/1/tags/", afterResponse: { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertNotEqual(res.status, .notFound)
             // By design fallback to IndexAll
-        }
+        })
     }
     
     func testIndexForGivenID() throws {
@@ -18,7 +18,7 @@ final class IndexChildrenTests: ApplicationXCTestCase {
         try routes()
 
         let id = 1
-        try app.test(.GET, "/todos/1/tags/\(id)") { res in
+        try app.test(.GET, "/todos/1/tags/\(id)", afterResponse: { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertNotEqual(res.status, .notFound)
             XCTAssertContent(Tag.Public.self, res) {
@@ -26,7 +26,7 @@ final class IndexChildrenTests: ApplicationXCTestCase {
                 XCTAssertNotEqual($0.id, 2)
                 XCTAssertEqual($0.title, "Important")
             }
-        }
+        })
     }
     
     func testIndexForFakeID() throws {
@@ -34,15 +34,15 @@ final class IndexChildrenTests: ApplicationXCTestCase {
         try routes()
         
         let fakeId1 = 150
-        try app.test(.GET, "/todos/1/tags/\(fakeId1)") { res in
+        try app.test(.GET, "/todos/1/tags/\(fakeId1)", afterResponse: { res in
             XCTAssertEqual(res.status, .notFound)
             XCTAssertNotEqual(res.status, .ok)
-        }
+        })
         
         let fakeId2 = "1a"
-        try app.test(.GET, "/todos/1/tags/\(fakeId2)") { res in
+        try app.test(.GET, "/todos/1/tags/\(fakeId2)", afterResponse: { res in
             XCTAssertEqual(res.status, .notFound)
             XCTAssertNotEqual(res.status, .ok)
-        }
+        })
     }
 }

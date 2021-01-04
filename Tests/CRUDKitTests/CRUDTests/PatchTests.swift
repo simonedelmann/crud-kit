@@ -25,7 +25,7 @@ final class PatchTests: ApplicationXCTestCase {
                 XCTAssertEqual($0.title, "Run other tests")
                 XCTAssertTrue($0.isPublic)
             }
-        }.test(.GET, "/todos/1") { res in
+        }.test(.GET, "/todos/1", afterResponse: { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertNotEqual(res.status, .notFound)
             
@@ -35,7 +35,7 @@ final class PatchTests: ApplicationXCTestCase {
                 XCTAssertEqual($0.title, "Run other tests")
                 XCTAssertTrue($0.isPublic)
             }
-        }
+        })
     }
     
     func testPatchWithInvalidData() throws {
@@ -45,7 +45,7 @@ final class PatchTests: ApplicationXCTestCase {
         try app.test(.PATCH, "/todos/1", body: Todo(title: "Ru")) { res in
             XCTAssertEqual(res.status, .badRequest)
             XCTAssertNotEqual(res.status, .ok)
-        }.test(.GET, "/todos/1") { res in
+        }.test(.GET, "/todos/1", afterResponse: { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertNotEqual(res.status, .notFound)
             
@@ -55,6 +55,6 @@ final class PatchTests: ApplicationXCTestCase {
                 XCTAssertEqual($0.title, "Wash clothes")
                 XCTAssertTrue($0.isPublic)
             }
-        }
+        })
     }
 }

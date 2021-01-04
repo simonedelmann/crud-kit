@@ -6,20 +6,20 @@ final class IndexAllChildrenTests: ApplicationXCTestCase {
         try routes()
         try Todo.seed(on: app.db) // Seed only Todos
         
-        try app.test(.GET, "/todos/1/tags") { res in
+        try app.test(.GET, "/todos/1/tags", afterResponse: { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertNotEqual(res.status, .notFound)
             XCTAssertContent([Tag].self, res) {
                 XCTAssertEqual($0.count, 0)
             }
-        }
+        })
     }
     
     func testIndexAllContainingAllElements() throws {
         try seed()
         try routes()
         
-        try app.test(.GET, "/todos/1/tags") { res in
+        try app.test(.GET, "/todos/1/tags", afterResponse: { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertNotEqual(res.status, .notFound)
             XCTAssertContent([Tag.Public].self, res) {
@@ -28,6 +28,6 @@ final class IndexAllChildrenTests: ApplicationXCTestCase {
                 XCTAssertNotEqual($0.count, 2)
                 XCTAssertEqual($0[0].title, "Important")
             }
-        }
+        })
     }
 }

@@ -6,10 +6,10 @@ final class CreateChildrenTests: ApplicationXCTestCase {
         try routes()
         try Todo.seed(on: app.db)
 
-        try app.test(.GET, "/todos/1/tags/1") { res in
+        try app.test(.GET, "/todos/1/tags/1", afterResponse: { res in
             XCTAssertEqual(res.status, .notFound)
             XCTAssertNotEqual(res.status, .ok)
-        }.test(.POST, "/todos/1/tags", body: Tag(title: "Foo", todo_id: 1)) { res in
+        }).test(.POST, "/todos/1/tags", body: Tag(title: "Foo", todo_id: 1)) { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertNotEqual(res.status, .notFound)
 
@@ -19,17 +19,17 @@ final class CreateChildrenTests: ApplicationXCTestCase {
                 XCTAssertEqual($0.$todo.id, 1)
                 XCTAssertEqual($0.title, "Foo")
             }
-        }.test(.GET, "/todos/1/tags/1") { res in
+        }.test(.GET, "/todos/1/tags/1", afterResponse: { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertNotEqual(res.status, .notFound)
-
+            
             XCTAssertContent(Tag.Public.self, res) {
                 XCTAssertNotNil($0.id)
                 XCTAssertEqual($0.id, 1)
                 XCTAssertEqual($0.$todo.id, 1)
                 XCTAssertEqual($0.title, "Foo")
             }
-        }
+        })
     }
     
     func testCreateWithValidDataButWithoutId() throws {
@@ -40,10 +40,10 @@ final class CreateChildrenTests: ApplicationXCTestCase {
         try routes()
         try Todo.seed(on: app.db)
 
-        try app.test(.GET, "/todos/1/tags/1") { res in
+        try app.test(.GET, "/todos/1/tags/1", afterResponse: { res in
             XCTAssertEqual(res.status, .notFound)
             XCTAssertNotEqual(res.status, .ok)
-        }.test(.POST, "/todos/1/tags", body: PublicTag(title: "Foo")) { res in
+        }).test(.POST, "/todos/1/tags", body: PublicTag(title: "Foo")) { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertNotEqual(res.status, .notFound)
 
@@ -53,17 +53,17 @@ final class CreateChildrenTests: ApplicationXCTestCase {
                 XCTAssertEqual($0.$todo.id, 1)
                 XCTAssertEqual($0.title, "Foo")
             }
-        }.test(.GET, "/todos/1/tags/1") { res in
+        }.test(.GET, "/todos/1/tags/1", afterResponse: { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertNotEqual(res.status, .notFound)
-
+            
             XCTAssertContent(Tag.Public.self, res) {
                 XCTAssertNotNil($0.id)
                 XCTAssertEqual($0.id, 1)
                 XCTAssertEqual($0.$todo.id, 1)
                 XCTAssertEqual($0.title, "Foo")
             }
-        }
+        })
     }
 
     func testCreateWithoutData() throws {
@@ -72,15 +72,15 @@ final class CreateChildrenTests: ApplicationXCTestCase {
 
         try routes()
 
-        try app.test(.GET, "/todos/1/tags/1") { res in
+        try app.test(.GET, "/todos/1/tags/1", afterResponse: { res in
             XCTAssertEqual(res.status, .notFound)
             XCTAssertNotEqual(res.status, .ok)
-        }.test(.POST, "/todos/1/tags", body: Empty()) { res in
+        }).test(.POST, "/todos/1/tags", body: Empty()) { res in
             XCTAssertEqual(res.status, .badRequest)
             XCTAssertNotEqual(res.status, .ok)
-        }.test(.GET, "/todos/1/tags/1") { res in
+        }.test(.GET, "/todos/1/tags/1", afterResponse: { res in
             XCTAssertEqual(res.status, .notFound)
             XCTAssertNotEqual(res.status, .ok)
-        }
+        })
     }
 }

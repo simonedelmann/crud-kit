@@ -29,7 +29,7 @@ final class ReplaceChildrenTests: ApplicationXCTestCase {
                 XCTAssertEqual($0.id, 1)
                 XCTAssertEqual($0.title, "Foo")
             }
-        }.test(.GET, "/todos/1/tags/1") { res in
+        }.test(.GET, "/todos/1/tags/1", afterResponse: { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertNotEqual(res.status, .notFound)
             
@@ -38,6 +38,6 @@ final class ReplaceChildrenTests: ApplicationXCTestCase {
                 XCTAssertEqual($0.id, 1)
                 XCTAssertEqual($0.title, "Foo")
             }
-        }
+        })
     }
 }

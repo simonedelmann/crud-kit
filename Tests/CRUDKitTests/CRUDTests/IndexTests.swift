@@ -5,11 +5,11 @@ final class IndexTests: ApplicationXCTestCase {
     func testIndexWithoutID() throws {
         try routes()
         
-        try app.test(.GET, "/todos/") { res in
+        try app.test(.GET, "/todos/", afterResponse: { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertNotEqual(res.status, .notFound)
             // By design fallback to IndexAll
-        }
+        })
     }
     
     func testIndexForGivenID() throws {
@@ -17,7 +17,7 @@ final class IndexTests: ApplicationXCTestCase {
         try routes()
 
         let id = 1
-        try app.test(.GET, "/todos/\(id)") { res in
+        try app.test(.GET, "/todos/\(id)", afterResponse: { res in
             XCTAssertEqual(res.status, .ok)
             XCTAssertNotEqual(res.status, .notFound)
             XCTAssertContent(Todo.Public.self, res) {
@@ -26,7 +26,7 @@ final class IndexTests: ApplicationXCTestCase {
                 XCTAssertEqual($0.title, "Wash clothes")
                 XCTAssertTrue($0.isPublic)
             }
-        }
+        })
     }
     
     func testIndexForFakeID() throws {
@@ -34,15 +34,15 @@ final class IndexTests: ApplicationXCTestCase {
         try routes()
         
         let fakeId1 = 150
-        try app.test(.GET, "/todos/\(fakeId1)") { res in
+        try app.test(.GET, "/todos/\(fakeId1)", afterResponse: { res in
             XCTAssertEqual(res.status, .notFound)
             XCTAssertNotEqual(res.status, .ok)
-        }
+        })
         
         let fakeId2 = "1a"
-        try app.test(.GET, "/todos/\(fakeId2)") { res in
+        try app.test(.GET, "/todos/\(fakeId2)", afterResponse: { res in
             XCTAssertEqual(res.status, .notFound)
             XCTAssertNotEqual(res.status, .ok)
-        }
+        })
     }
 }
