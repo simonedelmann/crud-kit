@@ -2,6 +2,10 @@
 
 We all write CRUD (Create-Read-Update-Delete) routes all the time. The intention of this package is to reduce repeating code and to provide a fast start for an API. 
 
+## Contribution
+
+This project is open for contributions. Feel free to clone, fork or make a PR. Help is very welcome!
+
 ## Installation
 
 Add this package to your `Package.swift` as dependency and to your target.
