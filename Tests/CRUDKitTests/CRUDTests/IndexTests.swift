@@ -25,6 +25,7 @@ final class IndexTests: ApplicationXCTestCase {
                 XCTAssertNotEqual($0.id, 2)
                 XCTAssertEqual($0.title, "Wash clothes")
                 XCTAssertTrue($0.isPublic)
+                XCTAssertEqual($0.tagCount, 1)
             }
         })
     }

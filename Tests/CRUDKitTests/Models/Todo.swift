@@ -27,10 +27,17 @@ extension Todo: CRUDModel {
         var id: Int?
         var title: String
         var isPublic: Bool
+        var tagCount: Int
     }
 
     var `public`: Public {
-        Public.init(id: id, title: title, isPublic: true)
+        Public.init(id: id, title: title, isPublic: true, tagCount: 0)
+    }
+    
+    func `public`(eventLoop: EventLoop, db: Database) -> EventLoopFuture<Public> {
+        self.$tags.query(on: db).all().map {
+            Public.init(id: self.id, title: self.title, isPublic: true, tagCount: $0.count)
+        }
     }
 
     struct Create: Content {

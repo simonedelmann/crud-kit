@@ -27,6 +27,7 @@ final class IndexAllTests: ApplicationXCTestCase {
                 XCTAssertNotEqual($0.count, 2)
                 XCTAssertEqual($0[0].title, Todo(title: "Wash clothes").title)
                 XCTAssertTrue($0[0].isPublic)
+                XCTAssertEqual($0[0].tagCount, 1)
             }
         })
     }

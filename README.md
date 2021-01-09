@@ -91,6 +91,8 @@ extension Todo: CRUDModel {
     func `public`(eventLoop: EventLoop, db: Database) -> EventLoopFuture<Public> {
         eventLoop.makeSucceededFuture(self.public)
     }
+    
+    // You can find an example for loading relationship in /Tests/CRUDKitTests/Models/Todo.swift
 }
 ```
 

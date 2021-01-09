@@ -33,6 +33,7 @@ final class ReplaceTests: ApplicationXCTestCase {
                 XCTAssertEqual($0.id, 1)
                 XCTAssertEqual($0.title, "Run other tests")
                 XCTAssertTrue($0.isPublic)
+                XCTAssertEqual($0.tagCount, 1)
             }
         }.test(.GET, "/todos/1", afterResponse: { res in
             XCTAssertEqual(res.status, .ok)
@@ -43,6 +44,7 @@ final class ReplaceTests: ApplicationXCTestCase {
                 XCTAssertEqual($0.id, 1)
                 XCTAssertEqual($0.title, "Run other tests")
                 XCTAssertTrue($0.isPublic)
+                XCTAssertEqual($0.tagCount, 1)
             }
         })
     }
@@ -88,6 +90,7 @@ final class ReplaceTests: ApplicationXCTestCase {
                 XCTAssertNotEqual($0.id, 2)
                 XCTAssertEqual($0.title, "Wash clothes")
                 XCTAssertTrue($0.isPublic)
+                XCTAssertEqual($0.tagCount, 1)
             }
         })
     }

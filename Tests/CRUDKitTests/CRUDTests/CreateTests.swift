@@ -17,6 +17,7 @@ final class CreateTests: ApplicationXCTestCase {
                 XCTAssertEqual($0.id, 1)
                 XCTAssertEqual($0.title, "Run tests")
                 XCTAssertTrue($0.isPublic)
+                XCTAssertEqual($0.tagCount, 0)
             }
         }.test(.GET, "/todos/1", afterResponse: { res in
             XCTAssertEqual(res.status, .ok)
@@ -27,6 +28,7 @@ final class CreateTests: ApplicationXCTestCase {
                 XCTAssertEqual($0.id, 1)
                 XCTAssertEqual($0.title, "Run tests")
                 XCTAssertTrue($0.isPublic)
+                XCTAssertEqual($0.tagCount, 0)
             }
         })
     }

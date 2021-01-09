@@ -12,7 +12,9 @@ final class DeleteTests: ApplicationXCTestCase {
             XCTAssertContent(Todo.Public.self, res) {
                 XCTAssertNotNil($0.id)
                 XCTAssertEqual($0.id, 1)
+                XCTAssertEqual($0.title, "Wash clothes")
                 XCTAssertTrue($0.isPublic)
+                XCTAssertEqual($0.tagCount, 1)
             }
         }).test(.DELETE, "/todos/1", afterResponse: { res in
             XCTAssertEqual(res.status, .ok)
