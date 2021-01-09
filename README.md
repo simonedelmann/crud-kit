@@ -75,7 +75,7 @@ extension Todo: CRUDModel {
         var done: Bool
     }
     
-    func `public`() -> Public {
+    var `public`: Public {
         Public.init(title: title, done: done)
     }
 }
