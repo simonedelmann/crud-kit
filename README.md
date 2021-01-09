@@ -12,7 +12,7 @@ Add this package to your `Package.swift` as dependency and to your target.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/simonedelmann/crud-kit.git", from: "1.0.0")
+    .package(url: "https://github.com/simonedelmann/crud-kit.git", from: "1.1.0")
 ],
 targets: [
     .target(name: "App", dependencies: [
