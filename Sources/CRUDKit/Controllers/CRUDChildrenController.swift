@@ -42,7 +42,7 @@ extension CRUDChildrenControllerProtocol {
 
     public func indexAll(req: Request) -> EventLoopFuture<[T.Public]> {
         ParentT.fetch(from: parentIdComponentKey, on: req).flatMap { parent in
-            parent[keyPath: self.children].query(on: req.db).all().public()
+            parent[keyPath: self.children].query(on: req.db).all().public(db: req.db)
         }
     }
     
@@ -54,7 +54,7 @@ extension CRUDChildrenControllerProtocol {
             parent[keyPath: self.children].query(on: req.db)
                 .filter(\._$id == id).first()
                 .unwrap(or: Abort(.notFound))
-                .public()
+                .public(db: req.db)
         }
     }
 
@@ -65,7 +65,7 @@ extension CRUDChildrenControllerProtocol {
         return ParentT.fetch(from: parentIdComponentKey, on: req).flatMap { parent in
             model[keyPath: self.parent].id = parent.id!
             return parent[keyPath: self.children].create(model, on: req.db)
-                .map { model }.public()
+                .map { model }.public(db: req.db)
         }
     }
 
@@ -85,7 +85,7 @@ extension CRUDChildrenControllerProtocol {
                         model.id = oldModel.id
                         model._$id.exists = oldModel._$id.exists
                         model[keyPath: self.parent].id = parent.id!
-                        return model.update(on: req.db).map { model }.public()
+                        return model.update(on: req.db).map { model }.public(db: req.db)
                     } catch {
                         return req.eventLoop.makeFailedFuture(error)
                     }
@@ -134,7 +134,7 @@ extension CRUDChildrenControllerProtocol where T: Patchable {
                 .flatMap { model in
                     do {
                         try model.patch(with: data)
-                        return model.update(on: req.db).map { model }.public()
+                        return model.update(on: req.db).map { model }.public(db: req.db)
                     } catch {
                         return req.eventLoop.makeFailedFuture(error)
                     }

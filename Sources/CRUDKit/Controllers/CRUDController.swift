@@ -25,18 +25,18 @@ extension CRUDControllerProtocol {
     }
     
     public func indexAll(req: Request) -> EventLoopFuture<[T.Public]> {
-        T.query(on: req.db).all().public()
+        T.query(on: req.db).all().public(db: req.db)
     }
     
     public func index(req: Request) -> EventLoopFuture<T.Public> {
-        T.fetch(from: idComponentKey, on: req).public()
+        T.fetch(from: idComponentKey, on: req).public(db: req.db)
     }
     
     public func create(req: Request) throws -> EventLoopFuture<T.Public> {
         try T.Create.validate(on: req)
         let data = try req.content.decode(T.Create.self)
         let model = try T.init(from: data)
-        return model.save(on: req.db).map { model }.public()
+        return model.save(on: req.db).map { model }.public(db: req.db)
     }
 
     public func replace(req: Request) throws -> EventLoopFuture<T.Public> {
@@ -47,7 +47,7 @@ extension CRUDControllerProtocol {
                 let model = try oldModel.replace(with: data)
                 model.id = oldModel.id
                 model._$id.exists = oldModel._$id.exists
-                return model.update(on: req.db).map { model }.public()
+                return model.update(on: req.db).map { model }.public(db: req.db)
             } catch {
                 return req.eventLoop.makeFailedFuture(error)
             }
@@ -81,7 +81,7 @@ extension CRUDControllerProtocol where T: Patchable {
         return T.fetch(from: idComponentKey, on: req).flatMap { model in
             do {
                 try model.patch(with: data)
-                return model.update(on: req.db).map { model }.public()
+                return model.update(on: req.db).map { model }.public(db: req.db)
             } catch {
                 return req.eventLoop.makeFailedFuture(error)
             }

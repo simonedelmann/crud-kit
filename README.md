@@ -81,6 +81,19 @@ extension Todo: CRUDModel {
 }
 ```
 
+That computed property will be converted to an `EventLoopFuture<Public>` afterwards. If you need to run asynchronous code to create your public instance (e.g. loading relationships), you can customize that conversion. Although you will have access to the database there, this should **not** be used to do any business logic.
+
+```swift
+extension Todo: CRUDModel {
+    // ...
+    
+    // This is the default implementation
+    func `public`(eventLoop: EventLoop, db: Database) -> EventLoopFuture<Public> {
+        eventLoop.makeSucceededFuture(self.public)
+    }
+}
+```
+
 ### Customize create / replace
 
 You can add specific logic while create / replace. This is especially helpful, if your create / replace request should take a subset of the models properties or if you need to do special stuff while creating / replacing.
