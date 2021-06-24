@@ -1,5 +1,7 @@
 # CRUDKit for Vapor 4
 
+**Not actively maintained** (see https://github.com/simonedelmann/crud-kit/issues/)
+
 We all write CRUD (Create-Read-Update-Delete) routes all the time. The intention of this package is to reduce repeating code and to provide a fast start for an API. 
 
 ## Contribution
